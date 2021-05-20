@@ -92,7 +92,13 @@ export default function RegisterScreen({ navigation }) {
             console.log('error: ' + e)
         }
     }
+    //fucntion to save data in email and password filed
 
+    const saveEmailAndUsername = (text) => {
+        setEmail(text);
+        let removePart = 0 || text.search('@@gmail.com')
+        setUserName((text.substring(0,14)))
+    }
     return (
         <View style={{ backgroundColor: '#f1f1f1' }}>
             <SafeAreaView style={styles.completeArea}>
@@ -100,8 +106,8 @@ export default function RegisterScreen({ navigation }) {
                 <Text style={styles.mainHeading}>Create Account 🖐️,</Text>
                 <Text style={styles.secondLine}>Register to get started!</Text>
                 <View style={styles.loginForm}>
-                    <TextInput style={styles.userTextStyle} onChangeText={setUserName} value={UserName} placeholderTextColor="grey" placeholder="Username" />
-                    <TextInput style={styles.userTextStyle} onChangeText={setEmail} value={email} placeholderTextColor="grey" placeholder="Email" />
+                    <TextInput editable={false} style={styles.userTextStyle} onChangeText={setUserName} value={UserName} placeholderTextColor="grey" placeholder="Username" />
+                    <TextInput style={styles.userTextStyle} onChangeText={saveEmailAndUsername} value={email} placeholderTextColor="grey" placeholder="Email" />
                     <TextInput style={styles.passTextStyle} onChangeText={setPassWord} value={PassWord} secureTextEntry={true} placeholderTextColor="grey" placeholder="Password" />
                     <TouchableOpacity style={styles.loginButton} onPress={() => {
                         sendDataToFirebase()
