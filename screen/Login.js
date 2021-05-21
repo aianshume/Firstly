@@ -6,6 +6,8 @@ import { AntDesign } from '@expo/vector-icons';
 import * as Google from 'expo-google-app-auth';
 import firebase from '../firebaseConfig'
 
+const db = firebase.firestore();
+
 export default function LoginScreen({ navigation }) {
     const [UserName, setUserName] = useState('')
     const [PassWord, setPassWord] = useState('')
@@ -52,23 +54,27 @@ export default function LoginScreen({ navigation }) {
 
                 // Sign in with credential from the Google user.
                 firebase.auth().signInWithCredential(credential)
-                .then(data=>{
-                    db.collection("Accounts").doc(data.user.substring(0, data.user.search('@gmail.com'))).get().then((doc) => {
-                        if (doc.exists) {
-                            console.log('user allready registerd')
-                        } else {
-                            // doc.data() will be undefined in this case
-                            db.collection('Accounts').doc(data.user.email.substring(0,data.user.email.search('@gmail.com'))).set({
-                                name : data.user.displayName,
-                                username : data.user.email.substring(0,data.user.email.search('@gmail.com')),
-                                image: data.user.photoURL,
-                                email: data.user.email
-                            })
-                        }
-                    }).catch((error) => {
-                        console.log("Error getting document:", error);
-                    });
-                })
+                    .then((data) => {
+                        db.collection("Accounts").doc(data.user.email.substring(0, data.user.email.search('@gmail.com'))).get().then((doc) => {
+                            if (doc.exists) {
+                                console.log('user allready registered')
+                            } else {
+                                db.collection('Accounts').doc(data.user.email.substring(0, data.user.email.search('@gmail.com'))).set({
+                                    name: data.user.displayName,
+                                    username: data.user.email.substring(0, data.user.email.search('@gmail.com')),
+                                    image: data.user.photoURL,
+                                    email: data.user.email,
+                                    followers: 0,
+                                    Articles: 0,
+                                    reating: 0,
+                                })
+                                    .then(() => console.log('data writed'))
+                                    .catch(() => console.log('error while writing data'))
+                            }
+                        }).catch((error) => {
+                            console.log("Error getting document:", error);
+                        });
+                    })
                     .catch((error) => {
                         // Handle Errors here.
                         var errorCode = error.code;

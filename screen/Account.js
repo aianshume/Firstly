@@ -6,14 +6,17 @@ import firebase from '../firebaseConfig'
 import NewBigBox from './compo/NewsBigBox'
 import faker from 'faker'
 import { StatusBar } from 'expo-status-bar';
+import LoadingPage from './compo/LoadingScr'
 
 const Account = ({ navigation }) => {
     const [userDetails, setUserDetails] = useState({
         name: 'data',
-        image: 'https://console.firebase.google.com/u/1/project/firstly-codenanshu/storage/firstly-codenanshu.appspot.com/files',
+        image: 'https://user-images.githubusercontent.com/68537640/118956405-32d80300-b97d-11eb-8bf2-74e34268ab87.png',
     })
+    const [isLoaded, setIsLoaded] = useState(false)
 
     const db = firebase.firestore();
+
     var un = firebase.auth().currentUser.email;
 
     const logout = async () => {
@@ -30,7 +33,8 @@ const Account = ({ navigation }) => {
         function loadData() {
             db.collection("Accounts").doc(un.substring(0, un.search('@gmail.com'))).get().then((doc) => {
                 if (doc.exists) {
-                    setUserDetails(doc.data())
+                    setUserDetails(doc.data());
+                    setIsLoaded(true)
                 } else {
                     // doc.data() will be undefined in this case
                     console.log("No such document!");
@@ -42,117 +46,123 @@ const Account = ({ navigation }) => {
         loadData();
     }, [])
 
-    return (
-        <View style={{ backgroundColor: '#f1f1f1' }}>
-            <StatusBar style='dark' />
-            <ScrollView showsVerticalScrollIndicator={false}>
-                <SafeAreaView style={styles.fullBox}>
-                    <View style={styles.headerSection}>
-                        <Ionicons onPress={() => navigation.goBack()} name="arrow-back-sharp" size={25} color="black" />
-                        <Text style={{ fontWeight: 'bold', fontSize: 17 }}>Profile</Text>
-                        <Text />
-                    </View>
-                    <View>
-                        <View style={styles.imageAndName}>
-                            <Image source={{ uri: userDetails.image }} style={styles.userImage} />
-                            <Text style={styles.channelName}>{userDetails.name}</Text>
-                            <View style={{ flexDirection: 'row' }}>
-                                <TouchableOpacity style={{
-                                    paddingLeft: 20,
-                                    paddingRight: 20,
-                                    paddingTop: 15,
-                                    paddingBottom: 15,
-                                    backgroundColor: '#111820',
-                                    borderRadius: 10,
-                                    marginTop: 10
-                                }}>
-                                    <Text style={{ color: '#f1f1f1' }}>Edit Profile</Text>
-                                </TouchableOpacity>
-                                <TouchableOpacity style={{
-                                    paddingLeft: 20,
-                                    paddingRight: 20,
-                                    paddingTop: 15,
-                                    paddingBottom: 15,
-                                    backgroundColor: '#111820',
-                                    borderRadius: 10,
-                                    marginTop: 10,
-                                    marginLeft: 10,
-                                }} onPress={() => {
-                                    firebase.auth().signOut().then(function () {
-                                        logout()
-                                    }, function (error) {
-                                        alert('Sign Out Error', error);
-                                    });
+    if (!isLoaded) {
+        return (<LoadingPage />)
+    } else if (isLoaded == true) {
+        return (
+            <View style={{ backgroundColor: '#f1f1f1' }}>
+                <StatusBar style='dark' />
+                <ScrollView showsVerticalScrollIndicator={false}>
+                    <SafeAreaView style={styles.fullBox}>
+                        <View style={styles.headerSection}>
+                            <Ionicons onPress={() => navigation.goBack()} name="arrow-back-sharp" size={25} color="black" />
+                            <Text style={{ fontWeight: 'bold', fontSize: 17 }}>Profile</Text>
+                            <Text />
+                        </View>
+                        <View>
+                            <View style={styles.imageAndName}>
+                                <Image source={{ uri: userDetails.image }} style={styles.userImage} />
+                                <Text style={styles.channelName}>{userDetails.name}</Text>
+                                <View style={{ flexDirection: 'row' }}>
+                                    <TouchableOpacity style={{
+                                        paddingLeft: 20,
+                                        paddingRight: 20,
+                                        paddingTop: 15,
+                                        paddingBottom: 15,
+                                        backgroundColor: '#111820',
+                                        borderRadius: 10,
+                                        marginTop: 10
+                                    }} onPress={() => navigation.navigate('editProfile', {
+                                        userState: userDetails
+                                    })}>
+                                        <Text style={{ color: '#f1f1f1' }}>Edit Profile</Text>
+                                    </TouchableOpacity>
+                                    <TouchableOpacity style={{
+                                        paddingLeft: 20,
+                                        paddingRight: 20,
+                                        paddingTop: 15,
+                                        paddingBottom: 15,
+                                        backgroundColor: '#111820',
+                                        borderRadius: 10,
+                                        marginTop: 10,
+                                        marginLeft: 10,
+                                    }} onPress={() => {
+                                        firebase.auth().signOut().then(function () {
+                                            logout()
+                                        }, function (error) {
+                                            alert('Sign Out Error', error);
+                                        });
 
-                                }}>
-                                    <Text style={{ color: '#f1f1f1' }}>Log Out</Text>
-                                </TouchableOpacity>
+                                    }}>
+                                        <Text style={{ color: '#f1f1f1' }}>Log Out</Text>
+                                    </TouchableOpacity>
+                                </View>
                             </View>
+                            <View style={styles.followBox}>
+                                <View style={styles.followTextBox}>
+                                    <Text style={styles.textInFollow}>Followers</Text>
+                                    <Text style={styles.textValue}>{userDetails.followers}</Text>
+                                </View>
+                                <View style={styles.followTextBox}>
+                                    <Text style={styles.textInFollow}>Articles</Text>
+                                    <Text style={styles.textValue}>{userDetails.Articles}</Text>
+                                </View>
+                                <View style={styles.followTextBox}>
+                                    <Text style={styles.textInFollow}>Reatings</Text>
+                                    <Text style={styles.textValue}>{userDetails.reating}/<Text style={{ color: 'grey' }}>5</Text></Text>
+                                </View>
+                            </View>
+                        </View><View style={styles.newsCardBoxList}>
+                            <NewBigBox
+                                username={userDetails.username}
+                                avatorImg={userDetails.image}
+                                channelNews={userDetails.name}
+                                newsImage={faker.image.imageUrl()}
+                                newsHeading={faker.lorem.lines(2)}
+                                catagory={faker.commerce.department()}
+                            />
+                            <NewBigBox
+                                username={userDetails.username}
+                                avatorImg={userDetails.image}
+                                channelNews={userDetails.name}
+                                newsImage={faker.image.imageUrl()}
+                                newsHeading={faker.lorem.lines(2)}
+                                catagory={faker.commerce.department()}
+                            />
+                            <NewBigBox
+                                username={userDetails.username}
+                                avatorImg={userDetails.image}
+                                channelNews={userDetails.name}
+                                newsImage={faker.image.imageUrl()}
+                                newsHeading={faker.lorem.lines(2)}
+                                catagory={faker.commerce.department()}
+                            />
+                            <NewBigBox
+                                username={userDetails.username}
+                                avatorImg={userDetails.image}
+                                channelNews={userDetails.name}
+                                newsImage={faker.image.imageUrl()}
+                                newsHeading={faker.lorem.lines(2)}
+                                catagory={faker.commerce.department()}
+                            />
+                            <NewBigBox
+                                username={userDetails.username}
+                                avatorImg={userDetails.image}
+                                channelNews={userDetails.name}
+                                newsImage={faker.image.imageUrl()}
+                                newsHeading={faker.lorem.lines(2)}
+                                catagory={faker.commerce.department()}
+                            />
                         </View>
-                        <View style={styles.followBox}>
-                            <View style={styles.followTextBox}>
-                                <Text style={styles.textInFollow}>Followers</Text>
-                                <Text style={styles.textValue}>{userDetails.followers}</Text>
-                            </View>
-                            <View style={styles.followTextBox}>
-                                <Text style={styles.textInFollow}>Articles</Text>
-                                <Text style={styles.textValue}>{userDetails.Articles}</Text>
-                            </View>
-                            <View style={styles.followTextBox}>
-                                <Text style={styles.textInFollow}>Reatings</Text>
-                                <Text style={styles.textValue}>{userDetails.reating}/<Text style={{ color: 'grey' }}>5</Text></Text>
-                            </View>
-                        </View>
-                    </View><View style={styles.newsCardBoxList}>
-                        <NewBigBox
-                            username={userDetails.username}
-                            avatorImg={userDetails.image}
-                            channelNews={userDetails.name}
-                            newsImage={faker.image.imageUrl()}
-                            newsHeading={faker.lorem.lines(2)}
-                            catagory={faker.commerce.department()}
-                        />
-                        <NewBigBox
-                            username={userDetails.username}
-                            avatorImg={userDetails.image}
-                            channelNews={userDetails.name}
-                            newsImage={faker.image.imageUrl()}
-                            newsHeading={faker.lorem.lines(2)}
-                            catagory={faker.commerce.department()}
-                        />
-                        <NewBigBox
-                            username={userDetails.username}
-                            avatorImg={userDetails.image}
-                            channelNews={userDetails.name}
-                            newsImage={faker.image.imageUrl()}
-                            newsHeading={faker.lorem.lines(2)}
-                            catagory={faker.commerce.department()}
-                        />
-                        <NewBigBox
-                            username={userDetails.username}
-                            avatorImg={userDetails.image}
-                            channelNews={userDetails.name}
-                            newsImage={faker.image.imageUrl()}
-                            newsHeading={faker.lorem.lines(2)}
-                            catagory={faker.commerce.department()}
-                        />
-                        <NewBigBox
-                            username={userDetails.username}
-                            avatorImg={userDetails.image}
-                            channelNews={userDetails.name}
-                            newsImage={faker.image.imageUrl()}
-                            newsHeading={faker.lorem.lines(2)}
-                            catagory={faker.commerce.department()}
-                        />
-                    </View>
-                    {/* <Button title='logout' onPress={() => {
+                        {/* <Button title='logout' onPress={() => {
                         firebase.auth().signOut()
                         logout();
                     }} /> */}
-                </SafeAreaView>
-            </ScrollView>
-        </View>
-    )
+                    </SafeAreaView>
+                </ScrollView>
+            </View>
+        )
+    }
 }
 
 const styles = StyleSheet.create({

@@ -15,9 +15,21 @@ export default function RegisterScreen({ navigation }) {
     const [email, setEmail] = useState('')
     const [PassWord, setPassWord] = useState('')
     // fucntion to send data to firebase
-
     const sendDataToFirebase = () => {
         firebase.auth().createUserWithEmailAndPassword(email, PassWord)
+            .then((data) => {
+                db.collection('Accounts').doc(data.user.email.substring(0, data.user.email.search('@gmail.com'))).set({
+                    name: 'Firstly User',
+                    username: UserName,
+                    image: 'https://user-images.githubusercontent.com/68537640/118956405-32d80300-b97d-11eb-8bf2-74e34268ab87.png',
+                    email: data.user.email,
+                    followers: 0,
+                    Articles: 0,
+                    reating: 0,
+                })
+                    .then(() => console.log('data writed'))
+                    .catch(() => console.log('error while writing data'))
+            })
             .catch(err => console.log(err))
     }
 
@@ -50,14 +62,17 @@ export default function RegisterScreen({ navigation }) {
                 // Sign in with credential from the Google user.
                 firebase.auth().signInWithCredential(credential)
                     .then((data) => {
-                        db.collection('Accounts').doc(data.user.email.substring(0,data.user.email.search('@gmail.com'))).set({
-                            name : data.user.displayName,
-                            username : data.user.email.substring(0,data.user.email.search('@gmail.com')),
+                        db.collection('Accounts').doc(data.user.email.substring(0, data.user.email.search('@gmail.com'))).set({
+                            name: data.user.displayName,
+                            username: data.user.email.substring(0, data.user.email.search('@gmail.com')),
                             image: data.user.photoURL,
-                            email: data.user.email
+                            email: data.user.email,
+                            followers: 0,
+                            Articles: 0,
+                            reating: 0,
                         })
-                        .then(()=> console.log('data writed'))
-                        .catch(()=> console.log('error while writing data'))
+                            .then(() => console.log('data writed'))
+                            .catch(() => console.log('error while writing data'))
                     })
                     .catch((error) => {
                         // Handle Errors here.
@@ -96,8 +111,9 @@ export default function RegisterScreen({ navigation }) {
 
     const saveEmailAndUsername = (text) => {
         setEmail(text);
-        let removePart = 0 || text.search('@@gmail.com')
-        setUserName((text.substring(0,14)))
+        if (Math.sign(text.search('@')) == 1){
+            setUserName(text.substring(0,text.search('@')))
+        }
     }
     return (
         <View style={{ backgroundColor: '#f1f1f1' }}>
