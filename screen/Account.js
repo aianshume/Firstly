@@ -7,6 +7,7 @@ import NewBigBox from './compo/NewsBigBox'
 import faker from 'faker'
 import { StatusBar } from 'expo-status-bar';
 import LoadingPage from './compo/LoadingScr'
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Account = ({ navigation }) => {
     const [userDetails, setUserDetails] = useState({
@@ -14,10 +15,6 @@ const Account = ({ navigation }) => {
         image: 'https://user-images.githubusercontent.com/68537640/118956405-32d80300-b97d-11eb-8bf2-74e34268ab87.png',
     })
     const [isLoaded, setIsLoaded] = useState(false)
-
-    const db = firebase.firestore();
-
-    var un = firebase.auth().currentUser.email;
 
     const logout = async () => {
         await firebase.auth().onAuthStateChanged(function (user) {
@@ -30,18 +27,13 @@ const Account = ({ navigation }) => {
     }
 
     useEffect(() => {
-        function loadData() {
-            db.collection("Accounts").doc(un.substring(0, un.search('@gmail.com'))).get().then((doc) => {
-                if (doc.exists) {
-                    setUserDetails(doc.data());
-                    setIsLoaded(true)
-                } else {
-                    // doc.data() will be undefined in this case
-                    console.log("No such document!");
-                }
-            }).catch((error) => {
-                console.log("Error getting document:", error);
-            });
+        const loadData = async()=> {
+            await AsyncStorage.getItem('@userProfile')
+            .then(doc=>{
+                let jsonData = JSON.parse(doc);
+                setUserDetails(jsonData)
+                setIsLoaded(true)
+            })
         }
         loadData();
     }, [])

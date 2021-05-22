@@ -7,6 +7,7 @@ import AccountScreen from './screen/Account'
 import NewsPage from './screen/NewsPage'
 import CheckTheUser from './screen/CheckTheUser'
 import EditProfile from './screen/EditProfile'
+import UploadScreen from './screen/Upload'
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
@@ -47,21 +48,29 @@ const HomePageStack = () => {
     <footerStack.Navigator screenOptions={({ route }) => ({
       tabBarIcon: ({ focused, color }) => {
         let iconName;
+        let iconSize;
 
         if (route.name === 'Home') {
           iconName = focused
             ? 'ios-home'
             : 'ios-home-outline';
+          iconSize = 24;
         } else if (route.name === 'Notification') {
           iconName = focused ? 'ios-notifications' : 'ios-notifications-outline';
+          iconSize = 24;
         } else if (route.name === 'Like') {
           iconName = focused ? 'bookmark' : 'bookmark-outline';
+          iconSize = 24;
         } else if (route.name === 'Account') {
           iconName = focused ? 'person-circle' : 'person-circle-outline';
+          iconSize = 24;
+        } else if (route.name === 'Upload') {
+          iconName = focused ? 'add-circle' : 'add-circle-outline';
+          iconSize = 38;
         }
 
         // You can return any component that you like here!
-        return <Ionicons name={iconName} size={24} color={color} />;
+        return <Ionicons name={iconName} size={iconSize} color={color} />;
       },
     })} tabBarOptions={{
       activeTintColor: '#ffffff',
@@ -71,6 +80,7 @@ const HomePageStack = () => {
     }}>
       <footerStack.Screen name='Home' component={HomeScreenStack} />
       <footerStack.Screen name='Notification' component={Notification} />
+      <footerStack.Screen name='Upload' component={UploadScreen} />
       <footerStack.Screen name='Like' component={HomeScreen} />
       <footerStack.Screen name='Account' component={AccountScreen} />
     </footerStack.Navigator>
