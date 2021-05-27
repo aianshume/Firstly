@@ -78,7 +78,7 @@ const EditProfile = ({ route, navigation }) => {
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
       allowsEditing: true,
-      aspect: [4, 3],
+      aspect: [4, 4],
       quality: 1,
     });
 
@@ -95,7 +95,7 @@ const EditProfile = ({ route, navigation }) => {
   } else if (isLoading == false) {
     return (
       <>
-        <View style={{ backgroundColor: '#f1f1f1' }}>
+        <View>
           <StatusBar style='dark' />
           <ScrollView showsVerticalScrollIndicator={false}>
             <SafeAreaView style={styles.fullBox}>

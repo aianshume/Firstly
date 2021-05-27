@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Text, View, StyleSheet, Image, Dimensions, TouchableWithoutFeedback, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import faker from 'faker'
 
 
 const NewsBigBox = (props) => {
@@ -13,11 +12,11 @@ const NewsBigBox = (props) => {
     })
     return (
         <View style={{ marginTop: 20 }}>
-            <View style={styles.headerView}>
+            <View>
                 {/* view for name and other */}
-                <View>
+                <View style={{flexDirection: 'row'}}>
                     <Image source={{ uri: props.avatorImg }} style={styles.avator} />
-                    <View style={{ flexDirection: 'column', marginLeft: 5 }}>
+                    <View style={{marginLeft: 10}}>
                         <Text style={styles.ChannelName}>{props.channelNews}</Text>
                         <Text style={styles.username}>@{props.username}</Text>
                     </View>
@@ -35,7 +34,7 @@ const NewsBigBox = (props) => {
                             catagory: props.catagory,
                             image: props.newsImage,
                             title: props.newsHeading,
-                            fullArticle: faker.lorem.paragraphs(4),
+                            fullArticle: props.fullArticle,
                         })
                     }}>
                         <Image style={styles.newsCard} source={{ uri: props.newsImage }} />
@@ -73,10 +72,6 @@ const NewsBigBox = (props) => {
 }
 
 const styles = StyleSheet.create({
-    headerView: {
-        flexDirection: 'row',
-        justifyContent: 'flex-start',
-    },
     avator: {
         width: 46,
         height: 46,

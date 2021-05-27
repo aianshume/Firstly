@@ -59,7 +59,6 @@ const NewsPage = ({ route }) => {
 const styles = StyleSheet.create({
     fullBox: {
         margin: 10,
-        backgroundColor: '#f1f1f1'
     },
     headerSection: {
         flexDirection: 'row',

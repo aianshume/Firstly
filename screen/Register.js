@@ -116,7 +116,7 @@ export default function RegisterScreen({ navigation }) {
         }
     }
     return (
-        <View style={{ backgroundColor: '#f1f1f1' }}>
+        <View >
             <SafeAreaView style={styles.completeArea}>
                 <StatusBar style="dark" />
                 <Text style={styles.mainHeading}>Create Account 🖐️,</Text>

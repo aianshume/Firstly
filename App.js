@@ -14,7 +14,7 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Ionicons } from '@expo/vector-icons';
 const footerStack = createBottomTabNavigator();
 const noNavStack = createStackNavigator();
- 
+
 //stack for login and sigup page and the reqirection from this stack 
 // is in login.js
 const LoginPageStack = () => {
@@ -22,7 +22,7 @@ const LoginPageStack = () => {
     <noNavStack.Navigator screenOptions={{
       headerShown: false
     }}>
-    <noNavStack.Screen name='check' component={CheckTheUser} />
+      <noNavStack.Screen name='check' component={CheckTheUser} />
       <noNavStack.Screen name="Login" component={Login} />
       <noNavStack.Screen name='Register' component={Register} />
     </noNavStack.Navigator>
@@ -89,8 +89,17 @@ const HomePageStack = () => {
 }
 
 function App() {
+  const MyTheme = {
+    dark: false,
+    colors: {
+      primary: 'rgb(255, 45, 85)',
+      background: '#ffffff',
+      card: 'rgb(255, 255, 255)',
+      text: '#000000'
+    },
+  };
   return (
-    <NavigationContainer>
+    <NavigationContainer theme={MyTheme}>
       <noNavStack.Navigator screenOptions={{
         headerShown: false
       }}>

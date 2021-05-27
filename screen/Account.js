@@ -42,7 +42,7 @@ const Account = ({ navigation }) => {
         return (<LoadingPage />)
     } else if (isLoaded == true) {
         return (
-            <View style={{ backgroundColor: '#f1f1f1' }}>
+            <View>
                 <StatusBar style='dark' />
                 <ScrollView showsVerticalScrollIndicator={false}>
                     <SafeAreaView style={styles.fullBox}>
