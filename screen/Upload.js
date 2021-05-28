@@ -92,53 +92,48 @@ export default function Upload({ navigation }) {
         setDic(text);
     }
 
-    const UploadToServer = () => {
+    const UploadToServer = async() => {
         if (itemSelected.isDicUpdate == false || itemSelected.isPhotoSelected == false || itemSelected.isTitleUpdate == false) {
             alert("Title, Article and Image Are Require Please Check Again Something is missing")
         } else {
-            db.collection('content').doc('index').get().then(
-                async (index) => {
+                    let articleId = userData.Articles + 1;
                     setIsUpload(true);
-                    let articleId = index.data().totalArticles + 1;
                     console.log('my article id: ' + articleId)
                     let metaData = {
                         type: `image/${checkTheFileExtention(image)}`
                     }
                     const response = await fetch(image)
                     const blob = await response.blob();
-                    await store.child(`content/${articleId}.${checkTheFileExtention(image)}`)
+                    await store.child(`content/${userData.username+articleId}.${checkTheFileExtention(image)}`)
                         .put(blob, metaData)
                         .then((doc) => doc.ref.getDownloadURL().then((URL) => {
                             console.log('iamge upload');
-                            db.collection('content').doc(articleId.toString()).set({
-                                Title: title,
-                                Article: dic,
-                                Image: URL,
-                                Video: videoLink,
-                                Location: location,
-                                Category: selectedValue,
-                                Avator: userData.image,
-                                Username: userData.username,
-                                Name: userData.name
+                            db.collection('Accounts').doc(userData.username).update({
+                                    posts : firebase.firestore.FieldValue.arrayUnion({
+                                        Title: title,
+                                        Article: dic,
+                                        Image: URL,
+                                        Video: videoLink,
+                                        Location: location,
+                                        Category: selectedValue,
+                                        Avator: userData.image,
+                                        Username: userData.username,
+                                        Name: userData.name
+                                    })
                             }).then(() => {
                                 console.log('data write in database')
                                 db.collection('Accounts').doc(userData.username).update({
-                                    Articles: userData.Articles + 1,
-                                    ArticleRef: userData.ArticleRef.push(articleId)
+                                    Articles: articleId
                                 }).then(() => {
-                                    db.collection("content").doc('index').update({
-                                        totalArticles: articleId
-                                    }).then(() => {
                                         console.log('data write in profile')
+                                        setIsUpload(false);
                                         navigation.goBack();
                                     })
                                 })
                             })
-                        }))
+                        )
                 }
-            )
         }
-    }
 
     if (isUpload == true) {
         return (<Loading />)

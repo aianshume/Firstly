@@ -19,15 +19,16 @@ export default function HomeScreen({ navigation }) {
     const [isLoaded, setIsLoaded] = React.useState(false);
     const db = firebase.firestore();
     var un = firebase.auth().currentUser.email;
+
     const renderItem = ({ item }) => (
         <NewBigBox
-            username={item.user.username}
-            fullArticle={item.post.Article}
-            catagory={item.post.Category}
-            newsImage={item.post.Image}
-            newsHeading={item.post.Title}
-            channelNews={item.user.name}
-            avatorImg={item.user.avator}
+            username={item.username}
+            fullArticle={item.article}
+            catagory={item.catagory}
+            newsImage={item.image}
+            newsHeading={item.title}
+            channelNews={item.name}
+            avatorImg={item.avator}
             nav={navigation}
         />
     );
@@ -40,39 +41,21 @@ export default function HomeScreen({ navigation }) {
                     let dataToStore = JSON.stringify(doc.data());
                     await AsyncStorage.setItem("@userProfile", dataToStore);
                     await console.log('data stored')
-                    try {
-                        console.log(userFollowing)
-                        let dump = Object.getOwnPropertyNames(userFollowing);
-                        for (var i = 0; i < dump.length; i++) {
-                            console.log(userFollowing[i]);
-                            await db.collection('Accounts').doc(userFollowing[i]).get().then(async (doc) => {
-                                if (doc.exists) {
-                                    let articles = doc.data().Articles;
-                                    let articleToLoad = [articles, articles - 1];
-                                    let userToLoad = userFollowing[i];
-                                    for (var j = 0; j < 2; j++) {
-                                        await db.collection('Accounts').doc(userToLoad).collection('Posts').doc(j.toString()).get().then(async (doc) => {
-                                            if (doc.exists) {
-                                                let postData = doc.data();
-                                                
-                                                
-                                                setIsLoaded(true)
-                                            } else {
-                                                console.log('doc not found , user: ' + userToLoad + ' and posts ' + j);
-                                                setIsLoaded(true)
-                                            }
-                                        })
-                                    }
-                                }
-                            })
-                        }
-                    } catch (e) {
-                        console.log('error: ' + e)
+                    let obj = {
+                        username : faker.name.firstName(),
+                        avator : faker.image.avatar(),
+                        name : faker.name.firstName(),
+                        title : faker.lorem.lines(3),
+                        article : faker.lorem.paragraphs(4),
+                        image : faker.image.image(),
+                        catagory : faker.commerce.department()
                     }
-
+                    await dataToPrint.push(obj);
+                    await setIsLoaded(true);
                 } else {
                     // doc.data() will be undefined in this case
                     console.log("No such document!");
+                    setIsLoaded(true);
                 }
             }).catch((error) => {
                 console.log("Error getting document:", error);
@@ -112,7 +95,7 @@ export default function HomeScreen({ navigation }) {
                         <FlatList
                             data={dataToPrint}
                             renderItem={renderItem}
-                            keyExtractor={item => dataToPrint.indexOf(item) + 1}
+                            keyExtractor={item => dataToPrint.indexOf(item).toString()}
                         />
                     </View>
                 </SafeAreaView>
