@@ -11,46 +11,60 @@ import firebase from '../firebaseConfig';
 import LoadingPage from './compo/LoadingScr'
 
 var setArticleToLoad = 0;
-var dataToPrint = [];
 var isUserFollowing = false;
 var userFollowing = [];
+var userTempData = [];
 
 export default function HomeScreen({ navigation }) {
     const [isLoaded, setIsLoaded] = React.useState(false);
+    const [dataToPrint, setDataToPrint] = React.useState([]);
+    const [userFollow, setUserFollow] = React.useState([]);
     const db = firebase.firestore();
     var un = firebase.auth().currentUser.email;
 
-    const renderItem = ({ item }) => (
-        <NewBigBox
-            username={item.username}
-            fullArticle={item.article}
-            catagory={item.catagory}
-            newsImage={item.image}
-            newsHeading={item.title}
-            channelNews={item.name}
-            avatorImg={item.avator}
-            nav={navigation}
-        />
-    );
+    const loadPostsFromUserFollowing = async (followings) => {
+        for (let i = 0; i < 5; i++) {
+            await db.collection('Accounts').doc(followings[setArticleToLoad]).get().then(async (doc) => {
+                if (doc.exists) {
+                    let totalArticle = await doc.data().Articles;
+                    let post = totalArticle-1;
+                    let postLength = await doc.data().PostLength;
+
+                    if (postLength == null){
+                        console.log('user have no any post')
+                    } else {
+                        console.log('so the totalArticle ' + post)
+                        console.log('article are not found when user is ' + followings[setArticleToLoad])
+                        userTempData.push(doc.data().posts[post])
+                        setDataToPrint(...dataToPrint, userTempData);
+                    }
+
+                    setUserFollow([...userFollow, {
+                        Avator: doc.data().image,
+                        Username: doc.data().username
+                    }]);
+
+                    setArticleToLoad = await setArticleToLoad + 1;
+                } else {
+                    console.log('user ' + followings[setArticleToLoad] + ' not found');
+                }
+            })
+        }
+    }
 
     React.useEffect(() => {
         const loadData = () => {
             db.collection("Accounts").doc(un.substring(0, un.search('@gmail.com'))).get().then(async (doc) => {
                 if (doc.exists) {
                     userFollowing = doc.data().following;
+                    if (userFollowing) {
+                        isUserFollowing = true;
+                        console.log('user is following someone')
+                    }
+                    await loadPostsFromUserFollowing(userFollowing);
                     let dataToStore = JSON.stringify(doc.data());
                     await AsyncStorage.setItem("@userProfile", dataToStore);
                     await console.log('data stored')
-                    let obj = {
-                        username : faker.name.firstName(),
-                        avator : faker.image.avatar(),
-                        name : faker.name.firstName(),
-                        title : faker.lorem.lines(3),
-                        article : faker.lorem.paragraphs(4),
-                        image : faker.image.image(),
-                        catagory : faker.commerce.department()
-                    }
-                    await dataToPrint.push(obj);
                     await setIsLoaded(true);
                 } else {
                     // doc.data() will be undefined in this case
@@ -72,32 +86,49 @@ export default function HomeScreen({ navigation }) {
                     <StatusBar style='dark' />
                     <View style={styles.HeaderPart}>
                         <Text style={styles.homeheading}>Home</Text>
-                        <Ionicons name="search-outline" size={24} color="black" />
+                        <Ionicons name="search-outline" size={24} color="black"  onPress= {()=> navigation.navigate('search')}/>
                     </View>
                     <ScrollView showsVerticalScrollIndicator={false}>
                         {/* story view */}
                         <View style={styles.storyLine}>
                             <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
-                                <StoryAvator imageUrl={faker.image.avatar()} />
-                                <StoryAvator imageUrl={faker.image.avatar()} />
-                                <StoryAvator imageUrl={faker.image.avatar()} />
-                                <StoryAvator imageUrl={faker.image.avatar()} />
-                                <StoryAvator imageUrl={faker.image.avatar()} />
-                                <StoryAvator imageUrl={faker.image.avatar()} />
-                                <StoryAvator imageUrl={faker.image.avatar()} />
-                                <StoryAvator imageUrl={faker.image.avatar()} />
-                                <StoryAvator imageUrl={faker.image.avatar()} />
+                                {
+                                    userFollow.map((item) => {
+                                        return (
+                                            <StoryAvator
+                                                imageUrl={item.Avator}
+                                                username={item.Username}
+                                                key={userFollow.indexOf(item)}
+                                            />
+                                        )
+                                    })
+                                }
                             </ScrollView>
                         </View>
+                        {/* news card view */}
+                        <View style={styles.newsCardBoxList}>
+                            {
+                                dataToPrint.map((item) => {
+                                    return (
+                                        <NewBigBox
+                                            username={item.Username}
+                                            fullArticle={item.Article}
+                                            catagory={item.Catagory}
+                                            newsImage={item.Image}
+                                            newsHeading={item.Title}
+                                            channelNews={item.Name}
+                                            avatorImg={item.Avator}
+                                            Likes={item.Likes}
+                                            Video={item.Video}
+                                            nav={navigation}
+                                            key={dataToPrint.indexOf(item)}
+                                            key2={dataToPrint.indexOf(item)}
+                                        />
+                                    )
+                                })
+                            }
+                        </View>
                     </ScrollView>
-                    {/* news card view */}
-                    <View style={styles.newsCardBoxList}>
-                        <FlatList
-                            data={dataToPrint}
-                            renderItem={renderItem}
-                            keyExtractor={item => dataToPrint.indexOf(item).toString()}
-                        />
-                    </View>
                 </SafeAreaView>
             </View>
         )

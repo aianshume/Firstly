@@ -1,9 +1,11 @@
 import React from 'react';
-import {View, Text, StyleSheet, Image, Dimensions, ScrollView} from 'react-native';
+import {View, Text, StyleSheet, Image, Dimensions, ScrollView, Button} from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { StatusBar } from 'expo-status-bar';
 import Notify from './compo/Notify'
 import faker from 'faker'
+
+
 const Notification = () => {
     return (
         <>

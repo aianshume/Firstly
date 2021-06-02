@@ -8,6 +8,7 @@ import NewsPage from './screen/NewsPage'
 import CheckTheUser from './screen/CheckTheUser'
 import EditProfile from './screen/EditProfile'
 import UploadScreen from './screen/Upload'
+import Search from './screen/Search';
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
@@ -37,6 +38,7 @@ const HomeScreenStack = () => {
       <noNavStack.Screen name='Home' component={HomeScreen} />
       <noNavStack.Screen name='NewsCard' component={NewsPage} />
       <noNavStack.Screen name='editProfile' component={EditProfile} />
+      <noNavStack.Screen name='search' component={Search} />
     </noNavStack.Navigator>
   )
 }

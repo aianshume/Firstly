@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import { Text, View, StyleSheet, Image, Dimensions, TouchableWithoutFeedback, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import firebase from '../../firebaseConfig';
 
+const db = firebase.firestore();
 
 const NewsBigBox = (props) => {
     const [like, setLike] = useState({
@@ -10,6 +12,48 @@ const NewsBigBox = (props) => {
         icon: 'heart-outline',
         icon2: 'ios-heart',
     })
+    const [isLiked, setIsLiked] = useState({
+        liked : false,
+        totalLikes : props.Likes
+    })
+
+    const handleLike = async() => {
+        if (like.liked === false) {
+            setLike({
+                color: '#FF2400',
+                icon: 'ios-heart',
+                icon2: 'heart-outline',
+                liked: true
+            })
+
+        } else if (like.liked === true) {
+            setLike({
+                color: 'black',
+                icon: 'heart-outline',
+                icon2: 'ios-heart',
+                liked: false
+            })
+        }
+        if (isLiked.liked == false){
+            setIsLiked({
+                liked : true,
+                totalLikes : props.Likes+1,
+            })
+            db.collection("Accounts").doc(props.username).update({
+                [`posts.${props.key2}.Likes`] : firebase.firestore.FieldValue.increment(1)
+            }).then(()=> console.log('liked'))
+
+        if (isLiked.liked == true){
+            setIsLiked({
+                liked : false,
+                totalLikes : props.Likes-1,
+            })
+            db.collection("Accounts").doc(props.username).update({
+                [`posts.${props.key2}.Likes`] : firebase.firestore.FieldValue.increment(-1)
+            }).then(()=> console.log('disliked'))
+        }
+    }}
+
     return (
         <View style={{ marginTop: 20 }}>
             <View>
@@ -35,6 +79,8 @@ const NewsBigBox = (props) => {
                             image: props.newsImage,
                             title: props.newsHeading,
                             fullArticle: props.fullArticle,
+                            nav : props.nav,
+                            likes: props.Likes
                         })
                     }}>
                         <Image style={styles.newsCard} source={{ uri: props.newsImage }} />
@@ -43,23 +89,9 @@ const NewsBigBox = (props) => {
                     <View style={{ flexDirection: 'column' }}>
                         <View style={{ backgroundColor: '#d9d9d9', width: (Dimensions.get('window').width / 100) * 85, height: 1, margin: 5 }} />
                         <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                            <Ionicons onPress={() => {
-                                if (like.liked === false) {
-                                    setLike({
-                                        color: '#FF2400',
-                                        icon: 'ios-heart',
-                                        icon2: 'heart-outline',
-                                        liked: true
-                                    })
-                                } else if (like.liked === true) {
-                                    setLike({
-                                        color: 'black',
-                                        icon: 'heart-outline',
-                                        icon2: 'ios-heart',
-                                        liked: false
-                                    })
-                                }
-                            }} name={like.icon} size={24} color={like.color} />
+                            <Ionicons onPress={() => handleLike()} name={like.icon} size={24} color={like.color}>
+                            <Text style={{fontSize: 15}}> {isLiked.totalLikes}</Text>
+                            </Ionicons>
                             <Ionicons name="md-chatbubbles-outline" size={24} color="black" />
                             <Ionicons name="bookmark-outline" size={24} color="black" />
                             <Ionicons name="share-social-outline" size={24} color="black" />
@@ -114,5 +146,4 @@ const styles = StyleSheet.create({
         fontSize: 15,
     }
 })
-
 export default NewsBigBox;

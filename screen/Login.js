@@ -152,6 +152,7 @@ export default function LoginScreen({ navigation }) {
 const styles = StyleSheet.create({
     completeArea: {
         margin: 30,
+        flex: 0
     },
     mainHeading: {
         fontSize: 30,
@@ -195,6 +196,7 @@ const styles = StyleSheet.create({
         borderRadius: 3
     },
     signupLink: {
-        marginBottom: 10
+        marginBottom: 10,
+        justifyContent: 'flex-end'
     }
 })

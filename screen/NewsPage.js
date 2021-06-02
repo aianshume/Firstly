@@ -17,7 +17,7 @@ const NewsPage = ({ route }) => {
             <SafeAreaView>
             <ScrollView showsVerticalScrollIndicator={false}>
                     <View style={styles.headerSection}>
-                        <Ionicons onPress={() => navigation.goBack()} name="arrow-back-sharp" size={25} color="black" />
+                        <Ionicons onPress={() => route.params.nav.goBack()} name="arrow-back-sharp" size={25} color="black" />
                         <Text style={{ fontWeight: 'bold', fontSize: 17 }}>{route.params.catagory}</Text>
                         <Text />
                     </View>
