@@ -19,7 +19,7 @@ const noNavStack = createStackNavigator();
 //stack for login and sigup page and the reqirection from this stack 
 // is in login.js
 
-// this is my seccret code
+// this is my seccret last comment
 
 const LoginPageStack = () => {
   return (
