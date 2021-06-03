@@ -18,6 +18,9 @@ const noNavStack = createStackNavigator();
 
 //stack for login and sigup page and the reqirection from this stack 
 // is in login.js
+
+// this is my seccret code
+
 const LoginPageStack = () => {
   return (
     <noNavStack.Navigator screenOptions={{
