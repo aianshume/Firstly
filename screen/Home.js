@@ -3,7 +3,6 @@ import { View, Text, StyleSheet, TouchableOpacity, Image, ScrollView, FlatList }
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { StatusBar } from 'expo-status-bar';
 import { Ionicons } from '@expo/vector-icons';
-import faker, { datatype } from 'faker';
 import StoryAvator from './compo/StoryAvator';
 import NewBigBox from './compo/NewsBigBox'
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -123,6 +122,7 @@ export default function HomeScreen({ navigation }) {
                                             nav={navigation}
                                             key={dataToPrint.indexOf(item)}
                                             key2={dataToPrint.indexOf(item)}
+                                            likedby = {dataToPrint.likedBy}
                                         />
                                     )
                                 })
