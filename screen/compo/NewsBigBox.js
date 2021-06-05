@@ -1,9 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Text, View, StyleSheet, Image, Dimensions, TouchableWithoutFeedback, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import firebase from '../../firebaseConfig';
 
 const db = firebase.firestore();
+var un = firebase.auth().currentUser.email;
+var UserNameOfTheUser = un.substring(0, un.search('@gmail.com'));
 
 const NewsBigBox = (props) => {
     const [like, setLike] = useState({
@@ -16,6 +18,12 @@ const NewsBigBox = (props) => {
         liked : false,
         totalLikes : props.Likes
     })
+
+    useEffect(()=>{
+        ()=>{
+            
+        }
+    },[])
 
     const handleLike = async() => {
         if (like.liked === false) {

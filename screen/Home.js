@@ -122,6 +122,7 @@ export default function HomeScreen({ navigation }) {
                                             nav={navigation}
                                             key={dataToPrint.indexOf(item)}
                                             key2={dataToPrint.indexOf(item)}
+                                            likedby = {dataToPrint.likedBy}
                                         />
                                     )
                                 })

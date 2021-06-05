@@ -8,14 +8,12 @@
     "eject": "expo eject"
   },
   "dependencies": {
-    "@eva-design/eva": "^2.1.0",
     "@expo/vector-icons": "^12.0.5",
     "@react-native-async-storage/async-storage": "^1.13.0",
     "@react-native-picker/picker": "^1.16.1",
     "@react-navigation/bottom-tabs": "^5.11.11",
     "@react-navigation/native": "^5.9.4",
     "@react-navigation/stack": "^5.14.5",
-    "@ui-kitten/components": "^5.1.0",
     "expo": "~41.0.1",
     "expo-google-app-auth": "^8.1.7",
     "expo-image-picker": "~10.1.4",
@@ -29,7 +27,12 @@
     "react-native-reanimated": "~2.1.0",
     "react-native-safe-area-context": "3.2.0",
     "react-native-screens": "~3.0.0",
+<<<<<<< HEAD
     "react-native-web": "^0.16.3"
+=======
+    "react-native-web": "^0.16.3",
+    "@react-native-community/masked-view": "0.1.10"
+>>>>>>> a536acaf389e42c26d6750386eeb4b183c8c54e4
   },
   "devDependencies": {
     "@babel/core": "^7.9.0"
