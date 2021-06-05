@@ -14,8 +14,6 @@ var isUserFollowing = false;
 var userFollowing = [];
 var userTempData = [];
 
-//checking that sublime text merge
-
 export default function HomeScreen({ navigation }) {
     const [isLoaded, setIsLoaded] = React.useState(false);
     const [dataToPrint, setDataToPrint] = React.useState([]);
