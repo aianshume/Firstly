@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { Text, View, StyleSheet, Image, Dimensions, TouchableWithoutFeedback, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import firebase from '../../firebaseConfig';
+import firebase from 'firebase';
 
 const db = firebase.firestore();
 var un = firebase.auth().currentUser.email;
 var UserNameOfTheUser = un.substring(0, un.search('@gmail.com'));
 
-const NewsBigBox = (props) => {
+const NewsBigBox = (props.postData) => {
     const [like, setLike] = useState({
         liked: false,
         color: 'black',
@@ -16,14 +16,8 @@ const NewsBigBox = (props) => {
     })
     const [isLiked, setIsLiked] = useState({
         liked : false,
-        totalLikes : props.Likes
+        totalLikes : props.postData.Likes
     })
-
-    useEffect(()=>{
-        ()=>{
-            
-        }
-    },[])
 
     const handleLike = async() => {
         if (like.liked === false) {
@@ -45,32 +39,37 @@ const NewsBigBox = (props) => {
         if (isLiked.liked == false){
             setIsLiked({
                 liked : true,
-                totalLikes : props.Likes+1,
+                totalLikes : props.postData.Likes+1,
             })
-            db.collection("Accounts").doc(props.username).update({
-                [`posts.${props.key2}.Likes`] : firebase.firestore.FieldValue.increment(1)
+            db.collection("Accounts").doc(props.postData.Username).update({
+                [`posts.${props.postData.key2}.Likes`] : firebase.firestore.FieldValue.increment(1)
             }).then(()=> console.log('liked'))
 
         if (isLiked.liked == true){
             setIsLiked({
                 liked : false,
-                totalLikes : props.Likes-1,
+                totalLikes : props.postData.Likes-1,
             })
-            db.collection("Accounts").doc(props.username).update({
-                [`posts.${props.key2}.Likes`] : firebase.firestore.FieldValue.increment(-1)
+            db.collection("Accounts").doc(props.postData.username).update({
+                [`posts.${props.postData.key2}.Likes`] : firebase.firestore.FieldValue.increment(-1)
             }).then(()=> console.log('disliked'))
         }
     }}
+
+    const handleTheLikeButton = () => {
+        let dataOfLikedUsers = props.postData.likedby;
+        console.log(typeof(dataOfLikedUsers))
+    }
 
     return (
         <View style={{ marginTop: 20 }}>
             <View>
                 {/* view for name and other */}
                 <View style={{flexDirection: 'row'}}>
-                    <Image source={{ uri: props.avatorImg }} style={styles.avator} />
+                    <Image source={{ uri: props.postData.avatorImg }} style={styles.avator} />
                     <View style={{marginLeft: 10}}>
-                        <Text style={styles.ChannelName}>{props.channelNews}</Text>
-                        <Text style={styles.username}>@{props.username}</Text>
+                        <Text style={styles.ChannelName}>{props.postData.channelNews}</Text>
+                        <Text style={styles.username}>@{props.postData.username}</Text>
                     </View>
                 </View>
             </View>
@@ -79,25 +78,25 @@ const NewsBigBox = (props) => {
                     {/* view for full news article */}
                     <View style={{ flexDirection: 'row', justifyContent: 'flex-start' }}>
                         <Ionicons name="ios-git-commit-outline" size={22} color="black" />
-                        <Text style={styles.catagory}> {props.catagory}</Text>
+                        <Text style={styles.catagory}> {props.postData.catagory}</Text>
                     </View>
                     <TouchableOpacity onPress={() => {
-                        props.nav.navigate('NewsCard', {
-                            catagory: props.catagory,
-                            image: props.newsImage,
-                            title: props.newsHeading,
-                            fullArticle: props.fullArticle,
-                            nav : props.nav,
-                            likes: props.Likes
+                        props.postData.nav.navigate('NewsCard', {
+                            catagory: props.postData.catagory,
+                            image: props.postData.newsImage,
+                            title: props.postData.newsHeading,
+                            fullArticle: props.postData.fullArticle,
+                            nav : props.postData.nav,
+                            likes: props.postData.Likes
                         })
                     }}>
-                        <Image style={styles.newsCard} source={{ uri: props.newsImage }} />
-                        <Text style={styles.newsTitle}>{props.newsHeading}</Text>
+                        <Image style={styles.newsCard} source={{ uri: props.postData.newsImage }} />
+                        <Text style={styles.newsTitle}>{props.postData.newsHeading}</Text>
                     </TouchableOpacity>
                     <View style={{ flexDirection: 'column' }}>
                         <View style={{ backgroundColor: '#d9d9d9', width: (Dimensions.get('window').width / 100) * 85, height: 1, margin: 5 }} />
                         <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                            <Ionicons onPress={() => handleLike()} name={like.icon} size={24} color={like.color}>
+                            <Ionicons onPress={() => handleTheLikeButton()} name={like.icon} size={24} color={like.color}>
                             <Text style={{fontSize: 15}}> {isLiked.totalLikes}</Text>
                             </Ionicons>
                             <Ionicons name="md-chatbubbles-outline" size={24} color="black" />

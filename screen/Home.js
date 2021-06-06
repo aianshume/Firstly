@@ -110,19 +110,8 @@ export default function HomeScreen({ navigation }) {
                                 dataToPrint.map((item) => {
                                     return (
                                         <NewBigBox
-                                            username={item.Username}
-                                            fullArticle={item.Article}
-                                            catagory={item.Catagory}
-                                            newsImage={item.Image}
-                                            newsHeading={item.Title}
-                                            channelNews={item.Name}
-                                            avatorImg={item.Avator}
-                                            Likes={item.Likes}
-                                            Video={item.Video}
-                                            nav={navigation}
-                                            key={dataToPrint.indexOf(item)}
-                                            key2={dataToPrint.indexOf(item)}
-                                            likedby = {dataToPrint.likedBy}
+                                            postData = {item}
+                                            key = {dataToPrint.indexOf(item)}
                                         />
                                     )
                                 })
