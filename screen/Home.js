@@ -14,6 +14,8 @@ var isUserFollowing = false;
 var userFollowing = [];
 var userTempData = [];
 
+// this line is used to check that all system are wrok or not
+
 export default function HomeScreen({ navigation }) {
     const [isLoaded, setIsLoaded] = React.useState(false);
     const [dataToPrint, setDataToPrint] = React.useState([]);
