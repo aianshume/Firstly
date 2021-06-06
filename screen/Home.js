@@ -53,6 +53,8 @@ export default function HomeScreen({ navigation }) {
 
     React.useEffect(() => {
         const loadData = () => {
+            // code stated working from here
+            // and then goes to upper fuctions
             db.collection("Accounts").doc(un.substring(0, un.search('@gmail.com'))).get().then(async (doc) => {
                 if (doc.exists) {
                     userFollowing = doc.data().following;
@@ -112,6 +114,8 @@ export default function HomeScreen({ navigation }) {
                                         <NewBigBox
                                             postData = {item}
                                             key = {dataToPrint.indexOf(item)}
+                                            key2 = {dataToPrint.indexOf(item)}
+                                            nav = {navigation}
                                         />
                                     )
                                 })
