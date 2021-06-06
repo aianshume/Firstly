@@ -6,6 +6,7 @@ import firebase from 'firebase';
 const db = firebase.firestore();
 var un = "anshumeena1947@gmail.com"
 var UserNameOfTheUser = un.substring(0, un.search('@gmail.com'));
+var isUserAllreadyLikedThePost = false;
 
 const NewsBigBox = (props) => {
     const [like, setLike] = useState({
@@ -19,8 +20,35 @@ const NewsBigBox = (props) => {
         totalLikes : props.postData.Likes
     })
 
+    useEffect(()=>{
+        const handleTheLikeButton = () => {
+        let dataOfLikedUsers = props.postData.likedBy;
+        if (dataOfLikedUsers[UserNameOfTheUser] == true){
+
+            console.log('user is allready liked the posts')
+            setIsLiked({
+                liked : true,
+                totalLikes : props.postData.Likes,
+            })
+            setLike({
+                color: '#FF2400',
+                icon: 'ios-heart',
+                icon2: 'heart-outline',
+                liked: true
+            })
+            isUserAllreadyLikedThePost = true;
+        } else {
+            isUserAllreadyLikedThePost = false;
+        }
+    }
+    handleTheLikeButton();
+    },[])
+
+
     const handleLike = async() => {
-        if (like.liked === false) {
+
+        if (isUserAllreadyLikedThePost == false){
+            if (like.liked === false) {
             setLike({
                 color: '#FF2400',
                 icon: 'ios-heart',
@@ -43,7 +71,9 @@ const NewsBigBox = (props) => {
             })
             db.collection("Accounts").doc(props.postData.Username).update({
                 [`posts.${props.key2}.Likes`] : firebase.firestore.FieldValue.increment(1)
-            }).then(()=> console.log('liked'))
+            }).then(()=> {
+                
+            })
 
         if (isLiked.liked == true){
             setIsLiked({
@@ -54,12 +84,12 @@ const NewsBigBox = (props) => {
                 [`posts.${props.key2}.Likes`] : firebase.firestore.FieldValue.increment(-1)
             }).then(()=> console.log('disliked'))
         }
-    }}
-
-    const handleTheLikeButton = () => {
-        let dataOfLikedUsers = props.postData.likedby;
-        console.log(typeof(dataOfLikedUsers))
     }
+        } else {
+            console.log('some err occure')
+        }
+        }
+
 
     return (
         <View style={{ marginTop: 20 }}>
@@ -96,7 +126,7 @@ const NewsBigBox = (props) => {
                     <View style={{ flexDirection: 'column' }}>
                         <View style={{ backgroundColor: '#d9d9d9', width: (Dimensions.get('window').width / 100) * 85, height: 1, margin: 5 }} />
                         <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                            <Ionicons onPress={() => handleTheLikeButton()} name={like.icon} size={24} color={like.color}>
+                            <Ionicons onPress={handleLike} name={like.icon} size={24} color={like.color}>
                             <Text style={{fontSize: 15}}> {isLiked.totalLikes}</Text>
                             </Ionicons>
                             <Ionicons name="md-chatbubbles-outline" size={24} color="black" />
