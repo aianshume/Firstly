@@ -46,8 +46,6 @@ const NewsBigBox = (props) => {
 
 
     const handleLike = async() => {
-
-        if (isUserAllreadyLikedThePost == false){
             if (like.liked === false) {
             setLike({
                 color: '#FF2400',
@@ -84,11 +82,8 @@ const NewsBigBox = (props) => {
                 [`posts.${props.key2}.Likes`] : firebase.firestore.FieldValue.increment(-1)
             }).then(()=> console.log('disliked'))
         }
+        }
     }
-        } else {
-            console.log('some err occure')
-        }
-        }
 
 
     return (
@@ -117,7 +112,9 @@ const NewsBigBox = (props) => {
                             title: props.postData.Title,
                             fullArticle: props.postData.Article,
                             nav : props.nav,
-                            likes: props.postData.Likes
+                            likes: props.postData.Likes,
+                            isLikedOrNot : isLiked.liked,
+                            key2 : props.key2
                         })
                     }}>
                         <Image style={styles.newsCard} source={{ uri: props.postData.Image }} />

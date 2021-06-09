@@ -26,6 +26,9 @@ export default function RegisterScreen({ navigation }) {
                     followers: 0,
                     Articles: 0,
                     reating: 0,
+                    following : {},
+                    PostLength : null,
+                    posts : {},
                 })
                     .then(() => console.log('data writed'))
                     .catch(() => console.log('error while writing data'))
@@ -70,6 +73,9 @@ export default function RegisterScreen({ navigation }) {
                             followers: 0,
                             Articles: 0,
                             reating: 0,
+                            following : {},
+                            PostLength : null,
+                            posts : {},
                         })
                             .then(() => console.log('data writed'))
                             .catch(() => console.log('error while writing data'))

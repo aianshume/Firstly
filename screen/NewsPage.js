@@ -1,8 +1,12 @@
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
 import { View, Text, StyleSheet, ScrollView, Image, Dimensions } from 'react-native'
 import { StatusBar } from 'expo-status-bar';
 import { Ionicons } from '@expo/vector-icons';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import firebase from 'firebase';
+
+const db = firebase.firestore();
+var isUserAllreadyLikedThePost = false;
 
 const NewsPage = ({ route }) => {
     const [like, setLike] = useState({
@@ -11,6 +15,75 @@ const NewsPage = ({ route }) => {
         icon : 'heart-outline',
         icon2 : 'ios-heart',
     })
+    const [isLiked, setIsLiked] = useState({
+        liked : false,
+        totalLikes : route.params.Likes
+    })
+
+    useEffect(()=>{
+        const handleTheLikeButton = () => {
+        let dataOfLikedUsers = route.params.isLikedOrNot;
+        if (dataOfLikedUsers == true){
+
+            console.log('user is allready liked the posts')
+            setIsLiked({
+                liked : true,
+                totalLikes : route.params.likes,
+            })
+            setLike({
+                color: '#FF2400',
+                icon: 'ios-heart',
+                icon2: 'heart-outline',
+                liked: true
+            })
+            isUserAllreadyLikedThePost = true;
+        } else {
+            isUserAllreadyLikedThePost = false;
+        }
+    }
+    handleTheLikeButton();
+    },[])
+
+    const handleLike = async() => {
+            if (like.liked === false) {
+            setLike({
+                color: '#FF2400',
+                icon: 'ios-heart',
+                icon2: 'heart-outline',
+                liked: true
+            })
+
+        } else if (like.liked === true) {
+            setLike({
+                color: 'black',
+                icon: 'heart-outline',
+                icon2: 'ios-heart',
+                liked: false
+            })
+        }
+        if (isLiked.liked == false){
+            setIsLiked({
+                liked : true,
+                totalLikes : route.params.Likes+1,
+            })
+            db.collection("Accounts").doc(route.params.Username).update({
+                [`posts.${route.params.key2}.Likes`] : firebase.firestore.FieldValue.increment(1)
+            }).then(()=> {
+                
+            })
+
+        if (isLiked.liked == true){
+            setIsLiked({
+                liked : false,
+                totalLikes : route.params.Likes-1,
+            })
+            db.collection("Accounts").doc(route.params.username).update({
+                [`posts.${route.params.key2}.Likes`] : firebase.firestore.FieldValue.increment(-1)
+            }).then(()=> console.log('disliked'))
+        }
+        }
+    }
+
     return (
         <View style={styles.fullBox}>
             <StatusBar style='dark' />
@@ -25,23 +98,9 @@ const NewsPage = ({ route }) => {
                     <View style={{marginTop: 15}}>
                         <Text style={{fontWeight: 'bold', fontSize: 18}}>{route.params.title}</Text>
                     <View style={{flexDirection: 'row', justifyContent: 'space-between', margin: 30}}>
-                        <Ionicons onPress={()=> {
-                            if (like.liked === false){
-                                setLike({
-                                color: '#FF2400',
-                                icon : 'ios-heart',
-                                icon2 : 'heart-outline',
-                                liked : true
-                            })
-                            } else if (like.liked === true){
-                                setLike({
-                                color: 'black',
-                                icon : 'heart-outline',
-                                icon2 : 'ios-heart',
-                                liked : false
-                            })
-                            }
-                        }} name={like.icon} size={24} color={like.color} />
+                        <Ionicons onPress={handleLike} name={like.icon} size={24} color={like.color}>
+                            <Text>{isLiked.totalLikes}</Text>
+                        </Ionicons>
                         <Ionicons name="md-chatbubbles-outline" size={24} color="black" />
                         <Ionicons name="bookmark-outline" size={24} color="black" />
                         <Ionicons name="share-social-outline" size={24} color="black" />

@@ -61,7 +61,7 @@ export default function HomeScreen({ navigation }) {
             db.collection("Accounts").doc(un.substring(0, un.search('@gmail.com'))).get().then(async (doc) => {
                 if (doc.exists) {
                     userFollowing = doc.data().following;
-                    if (userFollowing) {
+                    if (userFollowing != {}) {
                         isUserFollowing = true;
                         console.log('user is following someone')
                     }
@@ -84,7 +84,10 @@ export default function HomeScreen({ navigation }) {
     if (isLoaded == false) {
         return (<LoadingPage />)
     } else if (isLoaded == true) {
-        return (
+        if (isUserFollowing == false){
+            return (<Text>user is not following anymore</Text>)
+        } else if (isUserFollowing == true) {
+            return (
             <View>
                 <SafeAreaView>
                     <StatusBar style='dark' />
@@ -128,7 +131,8 @@ export default function HomeScreen({ navigation }) {
                 </SafeAreaView>
             </View>
         )
-    }
+        }
+        }
 }
 
 const styles = StyleSheet.create({

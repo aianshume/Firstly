@@ -9,6 +9,8 @@ import { StatusBar } from 'expo-status-bar';
 import LoadingPage from './compo/LoadingScr'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
+// there is some eror in this page
+
 const Account = ({ navigation }) => {
     const [userDetails, setUserDetails] = useState({
         name: 'data',
