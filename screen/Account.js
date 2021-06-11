@@ -4,12 +4,11 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import firebase from '../firebaseConfig'
 import NewBigBox from './compo/NewsBigBox'
-import faker from 'faker'
 import { StatusBar } from 'expo-status-bar';
 import LoadingPage from './compo/LoadingScr'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-// there is some eror in this page
+var userTempPost = [];
 
 const Account = ({ navigation }) => {
     const [userDetails, setUserDetails] = useState({
@@ -17,6 +16,7 @@ const Account = ({ navigation }) => {
         image: 'https://user-images.githubusercontent.com/68537640/118956405-32d80300-b97d-11eb-8bf2-74e34268ab87.png',
     })
     const [isLoaded, setIsLoaded] = useState(false)
+    const [articlesOfLoginUser, setArticlesOfLoginUser] = useState([])
 
     const logout = async () => {
         await firebase.auth().onAuthStateChanged(function (user) {
@@ -29,13 +29,16 @@ const Account = ({ navigation }) => {
     }
 
     useEffect(() => {
-        const loadData = async()=> {
+        const loadData = async () => {
             await AsyncStorage.getItem('@userProfile')
-            .then(doc=>{
-                let jsonData = JSON.parse(doc);
-                setUserDetails(jsonData)
-                setIsLoaded(true)
-            })
+                .then(async (doc) => {
+                    let jsonData = JSON.parse(doc);
+                    userTempPost.push(jsonData.posts)
+                    setArticlesOfLoginUser(...articlesOfLoginUser, userTempPost);
+                    setUserDetails(jsonData)
+                    setIsLoaded(true)
+
+                })
         }
         loadData();
     }, [])
@@ -107,7 +110,19 @@ const Account = ({ navigation }) => {
                                 </View>
                             </View>
                         </View><View style={styles.newsCardBoxList}>
-                            <NewBigBox
+                        {
+                                articlesOfLoginUser[0].map((item) => {
+                                    return (
+                                        <NewBigBox
+                                            postData = {item}
+                                            key = {articlesOfLoginUser.indexOf(item)}
+                                            key2 = {articlesOfLoginUser.indexOf(item)}
+                                            nav = {navigation}
+                                        />
+                                    )
+                                })
+                            }
+                            {/* <NewBigBox
                                 username={userDetails.username}
                                 avatorImg={userDetails.image}
                                 channelNews={userDetails.name}
@@ -146,7 +161,7 @@ const Account = ({ navigation }) => {
                                 newsImage={faker.image.imageUrl()}
                                 newsHeading={faker.lorem.lines(2)}
                                 catagory={faker.commerce.department()}
-                            />
+                            /> */}
                         </View>
                         {/* <Button title='logout' onPress={() => {
                         firebase.auth().signOut()
