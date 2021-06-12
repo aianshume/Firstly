@@ -4,7 +4,7 @@ import { Ionicons } from '@expo/vector-icons';
 import firebase from 'firebase';
 
 const db = firebase.firestore();
-var un = "anshumeena1947@gmail.com"
+var un = firebase.auth().currentUser.email;
 var UserNameOfTheUser = un.substring(0, un.search('@gmail.com'));
 var isUserAllreadyLikedThePost = false;
 
