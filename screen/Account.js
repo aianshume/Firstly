@@ -43,6 +43,19 @@ const Account = ({ navigation }) => {
         loadData();
     }, [])
 
+    const printTheArticles = () => {
+        for(var i = 0; i < Object.keys(articlesOfLoginUser).length; i++){
+            return (
+                <NewBigBox
+                    postData = {articlesOfLoginUser[i]}
+                    key = {articlesOfLoginUser.indexOf(articlesOfLoginUser[i])}
+                    key2 = {articlesOfLoginUser.indexOf(articlesOfLoginUser[i])}
+                    nav = {navigation}
+                />
+            ) 
+        }
+    }
+
     if (!isLoaded) {
         return (<LoadingPage />)
     } else if (isLoaded == true) {
@@ -111,17 +124,8 @@ const Account = ({ navigation }) => {
                             </View>
                         </View><View style={styles.newsCardBoxList}>
                         {
-                                articlesOfLoginUser[0].map((item) => {
-                                    return (
-                                        <NewBigBox
-                                            postData = {item}
-                                            key = {articlesOfLoginUser.indexOf(item)}
-                                            key2 = {articlesOfLoginUser.indexOf(item)}
-                                            nav = {navigation}
-                                        />
-                                    )
-                                })
-                            }
+                            printTheArticles()
+                        }
                             {/* <NewBigBox
                                 username={userDetails.username}
                                 avatorImg={userDetails.image}
