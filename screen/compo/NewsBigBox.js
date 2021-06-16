@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { Text, View, StyleSheet, Image, Dimensions, TouchableWithoutFeedback, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import firebase from 'firebase';
+import * as firebase from 'firebase';
 
 const db = firebase.firestore();
-var un = firebase.auth().currentUser.email;
+var un = 'anshumeena1947@gmail.com';
 var UserNameOfTheUser = un.substring(0, un.search('@gmail.com'));
+console.log(UserNameOfTheUser)
 var isUserAllreadyLikedThePost = false;
 
 const NewsBigBox = (props) => {
@@ -16,37 +17,37 @@ const NewsBigBox = (props) => {
         icon2: 'ios-heart',
     })
     const [isLiked, setIsLiked] = useState({
-        liked : false,
-        totalLikes : props.postData.Likes
+        liked: false,
+        totalLikes: props.postData.Likes
     })
 
-    useEffect(()=>{
+    useEffect(() => {
         const handleTheLikeButton = () => {
-        let dataOfLikedUsers = props.postData.likedBy;
-        if (dataOfLikedUsers[UserNameOfTheUser] == true){
+            let dataOfLikedUsers = props.postData.LikedBy;
+            if (dataOfLikedUsers[UserNameOfTheUser] == true) {
 
-            console.log('user is allready liked the posts')
-            setIsLiked({
-                liked : true,
-                totalLikes : props.postData.Likes,
-            })
-            setLike({
-                color: '#FF2400',
-                icon: 'ios-heart',
-                icon2: 'heart-outline',
-                liked: true
-            })
-            isUserAllreadyLikedThePost = true;
-        } else {
-            isUserAllreadyLikedThePost = false;
+                console.log('user is allready liked the posts')
+                setIsLiked({
+                    liked: true,
+                    totalLikes: props.postData.Likes,
+                })
+                setLike({
+                    color: '#FF2400',
+                    icon: 'ios-heart',
+                    icon2: 'heart-outline',
+                    liked: true
+                })
+                isUserAllreadyLikedThePost = true;
+            } else {
+                isUserAllreadyLikedThePost = false;
+            }
         }
-    }
-    handleTheLikeButton();
-    },[])
+        handleTheLikeButton();
+    }, [])
 
 
-    const handleLike = async() => {
-            if (like.liked === false) {
+    const handleLike = async () => {
+        if (like.liked === false) {
             setLike({
                 color: '#FF2400',
                 icon: 'ios-heart',
@@ -62,26 +63,24 @@ const NewsBigBox = (props) => {
                 liked: false
             })
         }
-        if (isLiked.liked == false){
+        if (isLiked.liked == false) {
             setIsLiked({
-                liked : true,
-                totalLikes : props.postData.Likes+1,
+                liked: true,
+                totalLikes: props.postData.Likes + 1,
             })
-            db.collection("Accounts").doc(props.postData.Username).update({
+            await db.collection("Accounts").doc(props.postData.Username).update({
                 [`posts.${props.key2}.Likes`] : firebase.firestore.FieldValue.increment(1)
-            }).then(()=> {
-                
-            })
+            }).then(() => console.log('liked'))
 
-        if (isLiked.liked == true){
-            setIsLiked({
-                liked : false,
-                totalLikes : props.postData.Likes-1,
-            })
-            db.collection("Accounts").doc(props.postData.username).update({
-                [`posts.${props.key2}.Likes`] : firebase.firestore.FieldValue.increment(-1)
-            }).then(()=> console.log('disliked'))
-        }
+            if (isLiked.liked == true) {
+                setIsLiked({
+                    liked: false,
+                    totalLikes: props.postData.Likes - 1,
+                })
+                await db.collection("Accounts").doc(props.postData.Username).update({
+                    [`posts.${props.key2}.Likes`] : firebase.firestore.FieldValue.increment(-1)
+                }).then(() => console.log('disliked'))
+            }
         }
     }
 
@@ -90,9 +89,9 @@ const NewsBigBox = (props) => {
         <View style={{ marginTop: 20 }}>
             <View>
                 {/* view for name and other */}
-                <View style={{flexDirection: 'row'}}>
+                <View style={{ flexDirection: 'row' }}>
                     <Image source={{ uri: props.postData.Avator }} style={styles.avator} />
-                    <View style={{marginLeft: 10}}>
+                    <View style={{ marginLeft: 10 }}>
                         <Text style={styles.ChannelName}>{props.postData.Name}</Text>
                         <Text style={styles.username}>@{props.postData.Username}</Text>
                     </View>
@@ -111,10 +110,10 @@ const NewsBigBox = (props) => {
                             image: props.postData.Image,
                             title: props.postData.Title,
                             fullArticle: props.postData.Article,
-                            nav : props.nav,
+                            nav: props.nav,
                             likes: props.postData.Likes,
-                            isLikedOrNot : isLiked.liked,
-                            key2 : props.key2
+                            isLikedOrNot: isLiked.liked,
+                            key2: props.key2
                         })
                     }}>
                         <Image style={styles.newsCard} source={{ uri: props.postData.Image }} />
@@ -124,7 +123,7 @@ const NewsBigBox = (props) => {
                         <View style={{ backgroundColor: '#d9d9d9', width: (Dimensions.get('window').width / 100) * 85, height: 1, margin: 5 }} />
                         <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                             <Ionicons onPress={handleLike} name={like.icon} size={24} color={like.color}>
-                            <Text style={{fontSize: 15}}> {isLiked.totalLikes}</Text>
+                                <Text style={{ fontSize: 15 }}> {isLiked.totalLikes}</Text>
                             </Ionicons>
                             <Ionicons name="md-chatbubbles-outline" size={24} color="black" />
                             <Ionicons name="bookmark-outline" size={24} color="black" />

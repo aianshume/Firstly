@@ -118,7 +118,9 @@ export default function Upload({ navigation }) {
                                         Category: selectedValue,
                                         Avator: userData.image,
                                         Username: userData.username,
-                                        Name: userData.name
+                                        Name: userData.name,
+                                        Likes : 0,
+                                        LikedBy : [],
                                     })
                             }).then(() => {
                                 console.log('data write in database')

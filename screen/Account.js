@@ -47,7 +47,7 @@ const Account = ({ navigation }) => {
         for(var i = 0; i < Object.keys(articlesOfLoginUser).length; i++){
             return (
                 <NewBigBox
-                    postData = {articlesOfLoginUser[i]}
+                    postData = {articlesOfLoginUser[0][i]}
                     key = {articlesOfLoginUser.indexOf(articlesOfLoginUser[i])}
                     key2 = {articlesOfLoginUser.indexOf(articlesOfLoginUser[i])}
                     nav = {navigation}
