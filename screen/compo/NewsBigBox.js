@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Text, View, StyleSheet, Image, Dimensions, TouchableWithoutFeedback, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import * as firebase from 'firebase';
+import { Avatar } from 'react-native-paper';
 
 const db = firebase.firestore();
 var un = 'anshumeena1947@gmail.com';
@@ -68,9 +69,9 @@ const NewsBigBox = (props) => {
                 liked: true,
                 totalLikes: props.postData.Likes + 1,
             })
-            await db.collection("Accounts").doc(props.postData.Username).update({
+            await db.collection("Accounts").doc(props.username).update({
                 [`posts.${props.key2}.Likes`] : firebase.firestore.FieldValue.increment(1)
-            }).then(() => console.log('liked'))
+            }).then(()=> console.log('liked'))
 
             if (isLiked.liked == true) {
                 setIsLiked({
@@ -90,7 +91,8 @@ const NewsBigBox = (props) => {
             <View>
                 {/* view for name and other */}
                 <View style={{ flexDirection: 'row' }}>
-                    <Image source={{ uri: props.postData.Avator }} style={styles.avator} />
+                    <Image  style={styles.avator} />
+                    <Avatar.Image size={46} source={{ uri: props.postData.Avator }} />
                     <View style={{ marginLeft: 10 }}>
                         <Text style={styles.ChannelName}>{props.postData.Name}</Text>
                         <Text style={styles.username}>@{props.postData.Username}</Text>
@@ -137,12 +139,6 @@ const NewsBigBox = (props) => {
 }
 
 const styles = StyleSheet.create({
-    avator: {
-        width: 46,
-        height: 46,
-        overflow: "hidden",
-        borderRadius: 50
-    },
     ChannelName: {
         fontSize: 16,
         fontWeight: 'bold'

@@ -156,7 +156,8 @@ export default function Upload({ navigation }) {
                         </View>
                         <View style={styles.boxToWrite}>
                             <View style={{ flexDirection: 'row' }}>
-                                <Image source={{ uri: userData.image }} style={styles.avatorImg} />
+                            <Avatar.Image size={46} source={{ uri: userData.image }} />
+                                <Image  style={styles.avatorImg} />
                                 <View style={{ marginLeft: 10 }}>
                                     <Text>{userData.name}</Text>
                                     <Text>@{userData.username}</Text>
@@ -211,12 +212,6 @@ const styles = StyleSheet.create({
     headerSection: {
         flexDirection: 'row',
         justifyContent: 'space-between',
-    },
-    avatorImg: {
-        height: 46,
-        width: 46,
-        overflow: 'hidden',
-        borderRadius: 50,
     },
     boxToWrite: {
         marginTop: 10

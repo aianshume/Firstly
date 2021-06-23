@@ -1,5 +1,6 @@
 import React from 'react';
 import {View, TouchableWithoutFeedback, Image, StyleSheet} from 'react-native';
+import { Avatar } from 'react-native-paper';
 
 export default function StoryAvator(props) {
     return (
@@ -7,7 +8,7 @@ export default function StoryAvator(props) {
             <TouchableWithoutFeedback onPress={()=> 
             console.log('story clicked')
             }>
-                    <Image source={{uri: props.imageUrl}} style={styles.sotryImage}/>
+                      <Avatar.Image size={54} source={{uri: props.imageUrl}} style={styles.sotryImage} />
             </TouchableWithoutFeedback>
       </View>
     );
@@ -15,10 +16,6 @@ export default function StoryAvator(props) {
 
 const styles = StyleSheet.create({
     sotryImage : {
-      width: 70,
-      height: 70,
-      overflow: 'hidden',
-      borderRadius: 10,
       marginLeft: 7,
       marginRight: 7,
       marginTop : 10

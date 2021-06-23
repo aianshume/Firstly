@@ -7,6 +7,7 @@ import NewBigBox from './compo/NewsBigBox'
 import { StatusBar } from 'expo-status-bar';
 import LoadingPage from './compo/LoadingScr'
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Avatar } from 'react-native-paper';
 
 var userTempPost = [];
 
@@ -71,7 +72,7 @@ const Account = ({ navigation }) => {
                         </View>
                         <View>
                             <View style={styles.imageAndName}>
-                                <Image source={{ uri: userDetails.image }} style={styles.userImage} />
+                            <Avatar.Image size={86} source={{uri: userDetails.image}} />
                                 <Text style={styles.channelName}>{userDetails.name}</Text>
                                 <View style={{ flexDirection: 'row' }}>
                                     <TouchableOpacity style={{
@@ -126,51 +127,7 @@ const Account = ({ navigation }) => {
                         {
                             printTheArticles()
                         }
-                            {/* <NewBigBox
-                                username={userDetails.username}
-                                avatorImg={userDetails.image}
-                                channelNews={userDetails.name}
-                                newsImage={faker.image.imageUrl()}
-                                newsHeading={faker.lorem.lines(2)}
-                                catagory={faker.commerce.department()}
-                            />
-                            <NewBigBox
-                                username={userDetails.username}
-                                avatorImg={userDetails.image}
-                                channelNews={userDetails.name}
-                                newsImage={faker.image.imageUrl()}
-                                newsHeading={faker.lorem.lines(2)}
-                                catagory={faker.commerce.department()}
-                            />
-                            <NewBigBox
-                                username={userDetails.username}
-                                avatorImg={userDetails.image}
-                                channelNews={userDetails.name}
-                                newsImage={faker.image.imageUrl()}
-                                newsHeading={faker.lorem.lines(2)}
-                                catagory={faker.commerce.department()}
-                            />
-                            <NewBigBox
-                                username={userDetails.username}
-                                avatorImg={userDetails.image}
-                                channelNews={userDetails.name}
-                                newsImage={faker.image.imageUrl()}
-                                newsHeading={faker.lorem.lines(2)}
-                                catagory={faker.commerce.department()}
-                            />
-                            <NewBigBox
-                                username={userDetails.username}
-                                avatorImg={userDetails.image}
-                                channelNews={userDetails.name}
-                                newsImage={faker.image.imageUrl()}
-                                newsHeading={faker.lorem.lines(2)}
-                                catagory={faker.commerce.department()}
-                            /> */}
                         </View>
-                        {/* <Button title='logout' onPress={() => {
-                        firebase.auth().signOut()
-                        logout();
-                    }} /> */}
                     </SafeAreaView>
                 </ScrollView>
             </View>
@@ -185,12 +142,6 @@ const styles = StyleSheet.create({
     },
     fullBox: {
         margin: 10,
-    },
-    userImage: {
-        height: 86,
-        width: 86,
-        overflow: 'hidden',
-        borderRadius: 50,
     },
     imageAndName: {
         justifyContent: 'center',
