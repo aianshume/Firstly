@@ -14,6 +14,8 @@ import * as eva from '@eva-design/eva';
 import {ApplicationProvider, IconRegistry} from '@ui-kitten/components';
 import { EvaIconsPack } from '@ui-kitten/eva-icons';
 import MainScreen from './components/Main'
+import AddScreen from './components/main/Add'
+
 
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
@@ -81,9 +83,11 @@ export default function App() {
     <Provider store={store}>
     <IconRegistry icons={EvaIconsPack} />
     <ApplicationProvider {...eva} theme={eva.light}>
+      <StatusBar style="dark"/>
     <NavigationContainer>
       <Stack.Navigator initialRouteName="Main">
         <Stack.Screen name="Main" options={{headerShown : false}} component={MainScreen} />
+        <Stack.Screen name="mainAdd" component={AddScreen} />
       </Stack.Navigator>
     </NavigationContainer>
     </ApplicationProvider>
