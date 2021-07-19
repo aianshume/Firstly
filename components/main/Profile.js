@@ -3,12 +3,12 @@ import {Text} from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
 
-const Feed = (props) => {
+const Profile = (props) => {
 	return (
 		<SafeAreaView>
-			<Text>hi working now</Text>
+			<Text>Profile</Text>
 		</SafeAreaView>
 	)
 }
 
-export default Feed
+export default Profile

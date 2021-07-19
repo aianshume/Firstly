@@ -3,7 +3,7 @@ import { ActivityIndicator, StyleSheet, View } from "react-native";
 
 const LoadingScr = () => (
   <View style={[styles.container, styles.horizontal]}>
-    <ActivityIndicator size="large" color="#111820" />
+    <ActivityIndicator size="large" color="'#3366ff" />
   </View>
 );
 

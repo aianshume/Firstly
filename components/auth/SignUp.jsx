@@ -116,7 +116,7 @@ export default ({ navigation }) => {
         <CheckBox
           style={styles.termsCheckBox}
           checked={termsAccepted}
-          onChange={(checked: boolean) => setTermsAccepted(checked)}>
+          onChange={(checked) => setTermsAccepted(checked)}>
           {renderCheckboxLabel}
         </CheckBox>
       </Layout>
