@@ -13,3 +13,11 @@ export const EmailIcon = (style) => (
 export const PlusIcon = (style) => (
   <Icon {...style} name='plus'/>
 );
+
+export const VideoIcon = (style) => {
+  return <Icon {...style} name="video-outline"/>
+}
+
+export const LocationIcon = (style) => {
+  return <Icon {...style} name="navigation-2-outline"/>
+}
