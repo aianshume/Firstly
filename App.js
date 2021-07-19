@@ -84,7 +84,7 @@ export default function App() {
     <IconRegistry icons={EvaIconsPack} />
     <ApplicationProvider {...eva} theme={eva.light}>
       <StatusBar style="dark"/>
-    <NavigationContainer>
+    <NavigationContainer theme={{colors: {background : "#ffffff"}}}>
       <Stack.Navigator initialRouteName="Main">
         <Stack.Screen name="Main" options={{headerShown : false}} component={MainScreen} />
         <Stack.Screen name="mainAdd" component={AddScreen} />
