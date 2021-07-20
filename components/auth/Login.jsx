@@ -4,12 +4,14 @@ import { View, TouchableWithoutFeedback } from 'react-native';
 import { Button, Input, Layout, StyleService, Text, useStyleSheet, Icon } from '@ui-kitten/components';
 import { KeyboardAvoidingView } from './extra/3rd-party';
 import { PersonIcon } from './extra/icons';
+import Loading from '../Loading'
 import firebase from 'firebase';
 
 const Landing = ({navigation}) => {
 	const [email, setEmail] = React.useState("");
 	const [password, setPassword] = React.useState("");
 	const [passwordVisible, setPasswordVisible] = React.useState(false);
+  const [loading, setLoading] = React.useState(false)
 
 		const styles = useStyleSheet(themedStyles);
 
@@ -32,6 +34,7 @@ const Landing = ({navigation}) => {
   	);
 
     const onSignInButtonPress = () => {
+      setLoading(true)
       firebase.auth().signInWithEmailAndPassword(email, password)
       .then((userCredential) => {
         // Signed in 
@@ -44,6 +47,10 @@ const Landing = ({navigation}) => {
     // ..
       });
     }
+
+    if (loading == true){
+      return <Loading/>
+    } else {
 
 	return (
 	<KeyboardAvoidingView style={styles.container}>
@@ -102,6 +109,7 @@ const Landing = ({navigation}) => {
       </Button>
     </KeyboardAvoidingView>
   );
+}
 }
 
 const themedStyles = StyleService.create({

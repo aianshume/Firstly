@@ -17,6 +17,8 @@ import {
   PlusIcon,
 } from './extra/icons';
 import { KeyboardAvoidingView } from './extra/3rd-party';
+import Loading from '../Loading'
+
 import firebase from 'firebase';
 
 export default ({ navigation }) => {
@@ -25,10 +27,12 @@ export default ({ navigation }) => {
   const [password, setPassword] = React.useState();
   const [termsAccepted, setTermsAccepted] = React.useState(false);
   const [passwordVisible, setPasswordVisible] = React.useState(false);
+  const [loading, setLoading] = React.useState(false)
 
   const styles = useStyleSheet(themedStyles);
 
   const onSignUpButtonPress = () => {
+    setLoading(true)
     console.log('signInButton clicked')
     firebase.auth().createUserWithEmailAndPassword(email, password)
     .then((userCredential) => {
@@ -38,7 +42,11 @@ export default ({ navigation }) => {
       .doc(user.uid)
       .set({
           name : userName,
-          email : email
+          email : email,
+          avatar : 'https://user-images.githubusercontent.com/68537640/126213945-ce70d4ae-d88b-4093-8acb-950343f0164e.png',
+          followers : 0,
+          following : 0,
+          posts : 0
       })
       // ...
     })
@@ -77,6 +85,10 @@ export default ({ navigation }) => {
     ),
     []
   );
+
+      if (loading == true){
+        return <Loading/>
+      } else {
 
   return (
     <KeyboardAvoidingView style={styles.container}>
@@ -136,6 +148,7 @@ export default ({ navigation }) => {
     </KeyboardAvoidingView>
   );
 };
+}
 
 const themedStyles = StyleService.create({
   container: {

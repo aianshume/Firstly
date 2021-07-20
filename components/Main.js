@@ -1,7 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux'
-import { fetchUser } from '../redux/actions/index'
+import { fetchUser, fetchUserPosts } from '../redux/actions/index'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import FeedScreen from './main/Feed'
 import ProfileScreen from './main/Profile';
@@ -16,6 +16,7 @@ const EmpityScreen = () => {
 function Main(props){
 	React.useEffect(()=> {
 		props.fetchUser();
+		props.fetchUserPosts();
 	},[])
 
 	return (
@@ -72,5 +73,5 @@ function Main(props){
 const mapStateToProps = (store) => ({
 	currentUser : store.userState.currentUser
 })
-const mapDispatchProps = (dispatch) => bindActionCreators({fetchUser}, dispatch)
+const mapDispatchProps = (dispatch) => bindActionCreators({fetchUser, fetchUserPosts}, dispatch)
 export default connect(mapStateToProps, mapDispatchProps)(Main)
