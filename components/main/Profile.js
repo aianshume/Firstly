@@ -3,7 +3,7 @@ import { StyleSheet, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Avatar, Layout, Text, Button, Divider } from '@ui-kitten/components';
 import { connect } from 'react-redux';
-import Card from './components/Card'
+import PostCard from './components/PostCard';
 
 const Profile = (props) => {
 	const { currentUser, posts } = props;
@@ -52,7 +52,12 @@ const Profile = (props) => {
 						onPress={() => console.log("clicked")}>
 						FOLLOW
 					</Button>
-				<Card/>
+					<Divider />
+				{
+					posts.map((item)=>{
+						return <PostCard key={posts.indexOf(item)} data={item} />
+					})
+				}
 				</Layout>
 			</Layout>
 		</SafeAreaView>
@@ -85,23 +90,23 @@ const styles = StyleSheet.create({
 		marginHorizontal: 8,
 	},
 	followBox: {
-        margin: 10,
-        flexDirection: 'row',
-        justifyContent: 'space-between'
-    },
-    followTextBox: {
-        flexDirection: 'column',
-        justifyContent: 'center',
-        alignItems: 'center',
-        marginTop: 10
-    },
+		margin: 10,
+		flexDirection: 'row',
+		justifyContent: 'space-between'
+	},
+	followTextBox: {
+		flexDirection: 'column',
+		justifyContent: 'center',
+		alignItems: 'center',
+		marginTop: 10
+	},
 	textInFollow: {
-        fontSize: 16
-    },
-    textValue: {
-        fontSize: 16,
-        fontWeight: 'bold'
-    },
+		fontSize: 16
+	},
+	textValue: {
+		fontSize: 16,
+		fontWeight: 'bold'
+	},
 });
 
 const mapStateToProps = (store) => ({

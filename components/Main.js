@@ -51,7 +51,7 @@ function Main(props){
 			activeTintColor: '#3366ff',
 			inactiveTintColor: '#8f9bb3',
 			showLabel: false,
-			style: { backgroundColor: '#fafafa' }
+			style: { backgroundColor: '#f5fff9' }
 		  }}>
 		      <Tab.Screen name="Feed" component={FeedScreen} />
 			  <Tab.Screen name="Search" component={ProfileScreen} />
