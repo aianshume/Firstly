@@ -33,3 +33,7 @@ export const HeartIcon = (style) => (
 export const ShareIcon = (style) => (
   <Icon {...style} name='share-outline'/>
 );
+
+export const SearchIcon = (style) => {
+  return <Icon {...style} name='search'/>
+}
