@@ -1,9 +1,9 @@
 import React from 'react'
 import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux'
-import { fetchUser, fetchUserPosts, fetchUserFollowing } from '../redux/actions/index'
+import { bindActionCreators } from 'redux';
+import { fetchUser, fetchUserPosts, fetchUserFollowing } from '../redux/actions/index';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import FeedScreen from './main/Feed'
+import FeedScreen from './main/Feed';
 import ProfileScreen from './main/Profile';
 import SearchScreen from './main/Search';
 import { Icon } from '@ui-kitten/components';
@@ -62,7 +62,7 @@ function Main(props) {
 				listeners={({ navigation }) => ({
 					tabPress: event => {
 						event.preventDefault();
-						navigation.navigate("mainAdd")
+						navigation.navigate("mainAdd");
 					}
 				})}
 			/>

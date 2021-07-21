@@ -1,15 +1,16 @@
 import React, { useState, useEffect } from 'react'
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View, ScrollView } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { Avatar, Layout, Text, Button, Divider } from '@ui-kitten/components';
 import { connect } from 'react-redux';
-import PostCard from './components/PostCard';
+import FeedCard from './components/FeedCard';
 import Loading from '../Loading'
 import firebase from 'firebase';
 require('firebase/firestore')
 
 const Feed = (props) => {
-	const [loading, setLoading] = useState(true)
-	const [posts, setPosts] = useState([]);
+	const [posts, setPosts] = useState([])
+	const [loading, setLoading] = useState(true);
 
 	useEffect(() => {
 		let posts = [];
@@ -20,29 +21,63 @@ const Feed = (props) => {
 					posts = [...posts, ...user.posts];
 				}
 			}
-			posts.sort()
+			posts.sort(function (x,y){
+				return x.date - y.date;
+			})
+
+			setPosts(posts);
+			setLoading(false);
 		}
 
 	}, [props.usersLoaded])
 
-	if (loading) {
-		return <Loading />
+	if (loading){
+		return <Loading/>
 	}
 
 	return (
-		<Text>ok</Text>
+		<SafeAreaView style={styles.safeArea}>
+			<Text>Home</Text>
+			{/*<FlatList
+				numColoums={1}
+				horizontal={false}
+				data={posts}
+				renderItem = {({ item }) => {
+					<FeedCard key={posts.indexOf(item)} data={item} />
+				}}
+			/>*/}
+			<ScrollView showsVerticalScrollIndicator={false}>
+			{
+				posts.map((item)=> {
+					return <FeedCard key={posts.indexOf(item)} data={item} />
+				})
+			}
+			{
+				posts.map((item)=> {
+					return <FeedCard key={posts.indexOf(item)} data={item} />
+				})
+			}
+			{
+				posts.map((item)=> {
+					return <FeedCard key={posts.indexOf(item)} data={item} />
+				})
+			}
+			</ScrollView>
+		</SafeAreaView>
 	)
 }
 
 const styles = StyleSheet.create({
-	
-});
+	safeArea : {
+		margin : 10
+	}
+})
 
 const mapStateToProps = (store) => ({
 	currentUser: store.userState.currentUser,
-	posts: store.userState.posts,
+	following: store.userState.following,
 	users : store.usersState.users,
-	usersLoaded : store.usersState.usersLoaded
+	usersLoaded : store.usersState.userLoaded,
 })
 
 export default connect(mapStateToProps, null)(Feed)
