@@ -1,5 +1,11 @@
 import firebase from 'firebase';
-import { USER_STATE_CHANGE, USER_POST_STATE_CHANGE, USER_FOLLOWING_STATE_CHANGE, USERS_DATA_STATE_CHANGE, USERS_POSTS_STATE_CHANGE } from '../constants/index'
+import { USER_STATE_CHANGE, USER_POST_STATE_CHANGE, USER_FOLLOWING_STATE_CHANGE, USERS_DATA_STATE_CHANGE, USERS_POSTS_STATE_CHANGE, USERS_DATA } from '../constants/index'
+
+export function clearData() {
+	return ((dispatch) => {
+		dispatch({ type: USERS_DATA })
+	})
+}
 
 export function fetchUser() {
 	return ((dispatch) => {
@@ -48,7 +54,7 @@ export function fetchUserFollowing() {
 					return id;
 				})
 				dispatch({ type: USER_FOLLOWING_STATE_CHANGE, following })
-				for(let i =0; i < following.length; i++){
+				for (let i = 0; i < following.length; i++) {
 					dispatch(fetchUsersData(following[i]))
 				}
 			})
@@ -87,14 +93,14 @@ export function fetchUsersFollowingPosts(uid) {
 			.orderBy('date', 'asc')
 			.get()
 			.then((snapshot) => {
-				
+
 				const uid = snapshot.docs[0].ref.path.split('/')[1]
 				const user = getState().usersState.users.find(el => el.uid === uid);
 
 				let posts = snapshot.docs.map(doc => {
 					const data = doc.data();
 					const id = doc.id;
-					return { id, ...data , user};
+					return { id, ...data, user };
 				})
 				dispatch({ type: USERS_POSTS_STATE_CHANGE, posts, uid })
 			})

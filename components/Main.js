@@ -1,9 +1,10 @@
 import React from 'react'
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { fetchUser, fetchUserPosts, fetchUserFollowing } from '../redux/actions/index';
+import { fetchUser, fetchUserPosts, fetchUserFollowing, clearData } from '../redux/actions/index';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import FeedScreen from './main/Feed';
+import CommentScreen from './main/Comment';
 import ProfileScreen from './main/Profile';
 import SearchScreen from './main/Search';
 import { Icon } from '@ui-kitten/components';
@@ -17,6 +18,7 @@ const EmpityScreen = () => {
 
 function Main(props) {
 	React.useEffect(() => {
+		props.clearData();
 		props.fetchUser();
 		props.fetchUserPosts();
 		props.fetchUserFollowing();
@@ -83,5 +85,5 @@ function Main(props) {
 const mapStateToProps = (store) => ({
 	currentUser: store.userState.currentUser
 })
-const mapDispatchProps = (dispatch) => bindActionCreators({ fetchUser, fetchUserPosts, fetchUserFollowing }, dispatch)
+const mapDispatchProps = (dispatch) => bindActionCreators({ fetchUser, fetchUserPosts, fetchUserFollowing, clearData }, dispatch)
 export default connect(mapStateToProps, mapDispatchProps)(Main)

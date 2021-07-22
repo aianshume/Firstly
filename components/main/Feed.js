@@ -49,17 +49,18 @@ const Feed = (props) => {
 			<ScrollView showsVerticalScrollIndicator={false}>
 			{
 				posts.map((item)=> {
-					return <FeedCard key={posts.indexOf(item)} data={item} />
+					console.log(item)
+					return <FeedCard navigation={props.navigation} key={posts.indexOf(item)} data={item} user={item.user} />
 				})
 			}
 			{
 				posts.map((item)=> {
-					return <FeedCard key={posts.indexOf(item)} data={item} />
+					return <FeedCard key={posts.indexOf(item)} data={item} navigation={props.navigation} user={item.user} />
 				})
 			}
 			{
 				posts.map((item)=> {
-					return <FeedCard key={posts.indexOf(item)} data={item} />
+					return <FeedCard key={posts.indexOf(item)} data={item} navigation={props.navigation} user={item.user} />
 				})
 			}
 			</ScrollView>

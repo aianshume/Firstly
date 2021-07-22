@@ -37,3 +37,19 @@ export const ShareIcon = (style) => (
 export const SearchIcon = (style) => {
   return <Icon {...style} name='search'/>
 }
+
+export const followIcon = (style) => {
+  return <Icon {...style} name='person-add-outline'/>
+}
+export const editIcon = (style) => {
+  return <Icon {...style} name='edit-outline'/>
+}
+export const unfollowIcon = (style) => {
+  return <Icon {...style} name='person-delete-outline'/>
+}
+export const logoutIcon = (style) => {
+  return <Icon {...style} name='unlock-outline'/>
+}
+export const CommentIcon = (style) => {
+  return <Icon {...style} name='message-circle-outline'/>
+}

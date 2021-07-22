@@ -1,7 +1,7 @@
 import React from 'react';
-import { ListRenderItemInfo, StyleSheet, View, Image, Dimensions } from 'react-native';
-import { Button, Card, List, Text } from '@ui-kitten/components';
-import { HeartIcon, PlusIcon, ShareIcon } from '../../auth/extra/icons';
+import { StyleSheet, View, Image, Dimensions } from 'react-native';
+import { Button, Card, Text } from '@ui-kitten/components';
+import { HeartIcon, CommentIcon, ShareIcon } from '../../auth/extra/icons';
 
 const PostCard = (props) => {
     console.log(props.data)
@@ -13,20 +13,26 @@ const PostCard = (props) => {
     
       const renderItemFooter = () => (
         <View style={styles.itemFooter}>
-          <View></View>
           <View style={styles.itemReactionsContainer}>
-            <Button
-              style={styles.iconButton}
-              appearance='ghost'
-              status='basic'
-              accessoryLeft={ShareIcon}/>
             <Button
               style={styles.iconButton}
               appearance='ghost'
               status='danger'
               accessoryLeft={HeartIcon}
             />
+            <Button
+              style={styles.iconButton}
+              appearance='ghost'
+              status='basic'
+              accessoryLeft={ShareIcon}/>
           </View>
+          <Button
+              style={styles.iconButton}
+              appearance='ghost'
+              status='basic'
+              onPress={()=> props.navigation.navigate('Comment', {postId : props.data.id, uid : props.user.uid})}
+              accessoryRight={CommentIcon}>
+                Comment</Button>
         </View>
       );
 
@@ -56,7 +62,7 @@ const styles = StyleSheet.create({
       marginVertical: 8,
     },
     itemHeader: {
-      minHeight: 180,
+      minHeight: (Dimensions.get('screen').height/100) * 25,
       width : (Dimensions.get('screen').width)
     },
     itemTitle: {

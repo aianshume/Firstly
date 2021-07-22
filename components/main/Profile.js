@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react'
-import { StyleSheet, View } from 'react-native';
+import { Dimensions, StyleSheet, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Avatar, Layout, Text, Button, Divider } from '@ui-kitten/components';
+import { editIcon, followIcon, unfollowIcon, logoutIcon } from '../auth/extra/icons';
 import { connect } from 'react-redux';
 import PostCard from './components/PostCard';
 import Loading from '../Loading'
@@ -62,30 +63,35 @@ const Profile = (props) => {
 
 	}, [props.route.params.uid, props.following])
 
+	
 	const onFollow = () => {
 		console.log('followed')
 		firebase.firestore()
-			.collection('following')
-			.doc(firebase.auth().currentUser.uid)
-			.collection('userFollowing')
-			.doc(props.route.params.uid)
-			.set({})
+		.collection('following')
+		.doc(firebase.auth().currentUser.uid)
+		.collection('userFollowing')
+		.doc(props.route.params.uid)
+		.set({})
 	}
-
+	
 	const onUnFollow = () => {
 		console.log('unfollod')
 		firebase.firestore()
-			.collection('following')
-			.doc(firebase.auth().currentUser.uid)
-			.collection('userFollowing')
-			.doc(props.route.params.uid)
-			.delete()
+		.collection('following')
+		.doc(firebase.auth().currentUser.uid)
+		.collection('userFollowing')
+		.doc(props.route.params.uid)
+		.delete()
+	}
+	
+	const onLogout = () => {
+		firebase.auth().signOut();
 	}
 
 	if (user === null) {
 		return <Loading />
 	}
-
+	
 	return (
 		<SafeAreaView>
 			<Layout
@@ -125,20 +131,49 @@ const Profile = (props) => {
 							<Text style={styles.textValue}>{user.posts}</Text>
 						</View>
 					</View>
-					{!following ? (
-						<Button
-							style={styles.followButton}
-							onPress={onFollow}>
-							FOLLOW
-						</Button>
+					{props.route.params.uid !== firebase.auth().currentUser.uid ? (
+						<View>
+							{!following ? (
+								<Button
+									style={styles.followButton}
+									status='info'
+									onPress={onFollow}
+									accessoryRight={followIcon}
+								>
+									FOLLOW
+								</Button>
+							) : (
+								<Button
+									style={onUnFollow}
+									status="danger"
+									onPress={onUnFollow}
+									accessoryRight={unfollowIcon}
+								>
+									UNFOLLOW
+								</Button>
+							)}
+						</View>
 					) : (
-						<Button
-							style={onUnFollow}
-							status="danger"
-							onPress={onUnFollow}>
-							UNFOLLOW
-						</Button>
+						<View style={styles.flexrow}>
+							<Button
+								style={styles.button}
+								status="info"
+								onPress={onUnFollow}
+								accessoryRight={editIcon}
+							>
+								EDIT
+							</Button>
+							<Button
+								style={styles.button}
+								status="danger"
+								onPress={onLogout}
+								accessoryRight={logoutIcon}
+							>
+								LOGOUT
+							</Button>
+						</View>
 					)}
+
 					<Divider />
 					{
 						userPosts.map((item) => {
@@ -194,6 +229,13 @@ const styles = StyleSheet.create({
 		fontSize: 16,
 		fontWeight: 'bold'
 	},
+	flexrow : {
+		flexDirection: 'row',
+		justifyContent: 'space-between'
+	},
+	button : {
+		width : (Dimensions.get('screen').width/100)*43
+	}
 });
 
 const mapStateToProps = (store) => ({
