@@ -4,7 +4,6 @@ import { bindActionCreators } from 'redux';
 import { fetchUser, fetchUserPosts, fetchUserFollowing, clearData } from '../redux/actions/index';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import FeedScreen from './main/Feed';
-import CommentScreen from './main/Comment';
 import ProfileScreen from './main/Profile';
 import SearchScreen from './main/Search';
 import { Icon } from '@ui-kitten/components';
@@ -47,6 +46,9 @@ function Main(props) {
 				} else if (route.name === 'Add') {
 					iconName = focused ? 'plus-circle' : 'plus-circle-outline';
 					iconSize = 24;
+				} else if (route.name === 'Comment') {
+					iconName = focused ? 'plus-circle' : 'plus-circle-outline';
+					iconSize = 24;
 				}
 
 				// You can return any component that you like here!
@@ -73,7 +75,7 @@ function Main(props) {
 				listeners={({ navigation }) => ({
 					tabPress: event => {
 						event.preventDefault();
-						navigation.navigate("Profile", {uid : firebase.auth().currentUser.uid})
+						navigation.navigate("Profile", { uid: firebase.auth().currentUser.uid })
 					}
 				})}
 			/>

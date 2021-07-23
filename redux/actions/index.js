@@ -60,6 +60,33 @@ export function fetchUserFollowing() {
 			})
 	})
 }
+
+export function fetchUsersDataForComment(uid, getPosts) {
+    return ((dispatch, getState) => {
+        const found = getState().usersState.users.some(el => el.uid === uid);
+        if (!found) {
+            firebase.firestore()
+                .collection("users")
+                .doc(uid)
+                .get()
+                .then((snapshot) => {
+                    if (snapshot.exists) {
+                        let user = snapshot.data();
+                        user.uid = snapshot.id;
+
+                        dispatch({ type: USERS_DATA_STATE_CHANGE, user });
+                    }
+                    else {
+                        console.log('does not exist')
+                    }
+                })
+                if(getPosts){
+                    dispatch(fetchUsersFollowingPosts(uid));
+                }
+        }
+    })
+}
+
 export function fetchUsersData(uid) {
 	return ((dispatch, getState) => {
 		const found = getState().usersState.users.some(el => el.uid === uid);
