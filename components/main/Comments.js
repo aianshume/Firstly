@@ -27,7 +27,8 @@ function Comment(props) {
                 const user = props.users.find(x => x.uid === comments[i].creator)
                 console.log('user', user)
                 if (user == undefined) {
-                    props.fetchUsersDataForComment(comments[i].creator, false)
+                   let user = props.fetchUsersDataForComment(comments[i].creator, false)
+                   comments[i].user = user
                 } else {
                     comments[i].user = user
                 }
@@ -81,10 +82,12 @@ function Comment(props) {
                 renderItem={({ item }) => (
                     <View>
                         <Layout style={styles.profileCard}>
-                            {item.user !== undefined ?
-                                <Avatar source={{ uri: item.avatar }} size='small' />
-                                : <Avatar source={{ uri: urlOfImage }} size='small' />}
-                            <Text style={{ marginLeft: 20 }}  >{item.text}</Text>
+                            <Avatar source={{ uri: urlOfImage }} size='small' />
+                            <Layout>
+                                <Text style={{ marginLeft: 20 }}  >{item.text}</Text>
+                                {console.log("these are the items", item)}
+                                {/* <Text style={{ marginLeft: 20 }}  >{item.user.name}</Text> */}
+                            </Layout>
                         </Layout>
                     </View>
                 )}

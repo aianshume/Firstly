@@ -16,6 +16,7 @@ import { EvaIconsPack } from '@ui-kitten/eva-icons';
 import MainScreen from './components/Main';
 import AddScreen from './components/main/Add';
 import CommentsScreen from './components/main/Comments';
+import { useFonts } from 'expo-font';
 
 
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
@@ -42,6 +43,11 @@ export default function App() {
     loaded: null
   })
 
+  const [loaded] = useFonts({
+    mukta : require('./assets/fonts/Mukta-Medium.ttf'),
+    noto : require('./assets/fonts/NotoSans-Regular.ttf')
+  })
+
   React.useEffect(() => {
     firebase.auth().onAuthStateChanged((user) => {
       if (!user) {
@@ -64,6 +70,7 @@ export default function App() {
     )
   }
 
+  if(loaded){
   if (!status.loggedIn) {
     return (
       <>
@@ -94,5 +101,7 @@ export default function App() {
         </NavigationContainer>
       </ApplicationProvider>
     </Provider>
-  )
+  )} else {
+    return <Loading/>
+  }
 }

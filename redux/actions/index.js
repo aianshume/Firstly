@@ -75,6 +75,7 @@ export function fetchUsersDataForComment(uid, getPosts) {
                         user.uid = snapshot.id;
 
                         dispatch({ type: USERS_DATA_STATE_CHANGE, user });
+						return snapshot.data();
                     }
                     else {
                         console.log('does not exist')

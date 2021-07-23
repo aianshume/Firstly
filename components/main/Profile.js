@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Dimensions, StyleSheet, View } from 'react-native';
+import { Dimensions, StyleSheet, View, ScrollView } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Avatar, Layout, Text, Button, Divider } from '@ui-kitten/components';
 import { editIcon, followIcon, unfollowIcon, logoutIcon } from '../auth/extra/icons';
@@ -94,6 +94,7 @@ const Profile = (props) => {
 	
 	return (
 		<SafeAreaView>
+			<ScrollView showsVerticalScrollIndicator={false}>
 			<Layout
 				style={styles.container}
 				level='2'>
@@ -182,6 +183,7 @@ const Profile = (props) => {
 					}
 				</Layout>
 			</Layout>
+			</ScrollView>
 		</SafeAreaView>
 	)
 }

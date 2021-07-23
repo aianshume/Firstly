@@ -72,6 +72,7 @@ const styles = StyleSheet.create({
     },
     itemDescription: {
       marginHorizontal: -8,
+      fontFamily : 'noto'
     },
     itemFooter: {
       flexDirection: 'row',

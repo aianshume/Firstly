@@ -14,14 +14,14 @@ const Feed = (props) => {
 
 	useEffect(() => {
 		let posts = [];
-		if (props.usersLoaded == props.following.length){
-			for(let i = 0; i < props.following.length; i++){
-				const user = props.users.find(el => el.uid === props.following[i]);	
-				if (user != undefined){
+		if (props.usersLoaded == props.following.length) {
+			for (let i = 0; i < props.following.length; i++) {
+				const user = props.users.find(el => el.uid === props.following[i]);
+				if (user != undefined) {
 					posts = [...posts, ...user.posts];
 				}
 			}
-			posts.sort(function (x,y){
+			posts.sort(function (x, y) {
 				return x.date - y.date;
 			})
 
@@ -31,54 +31,55 @@ const Feed = (props) => {
 
 	}, [props.usersLoaded])
 
-	if (loading){
-		return <Loading/>
+	if (loading) {
+		return <Loading />
 	}
 
 	return (
-		<SafeAreaView style={styles.safeArea}>
-			<Text>Home</Text>
-			{/*<FlatList
-				numColoums={1}
-				horizontal={false}
-				data={posts}
-				renderItem = {({ item }) => {
-					<FeedCard key={posts.indexOf(item)} data={item} />
-				}}
-			/>*/}
-			<ScrollView showsVerticalScrollIndicator={false}>
-			{
-				posts.map((item)=> {
-					console.log(item)
-					return <FeedCard navigation={props.navigation} key={posts.indexOf(item)} data={item} user={item.user} />
-				})
-			}
-			{
-				posts.map((item)=> {
-					return <FeedCard key={posts.indexOf(item)} data={item} navigation={props.navigation} user={item.user} />
-				})
-			}
-			{
-				posts.map((item)=> {
-					return <FeedCard key={posts.indexOf(item)} data={item} navigation={props.navigation} user={item.user} />
-				})
-			}
-			</ScrollView>
+		<SafeAreaView>
+					<Text category='h5' style={styles.heading}>Firstly 👋</Text>
+			<Layout style={styles.safeArea}>
+				<ScrollView showsVerticalScrollIndicator={false}>
+					{
+						posts.map((item) => {
+							console.log(item)
+							return <FeedCard navigation={props.navigation} key={posts.indexOf(item)} data={item} user={item.user} />
+						})
+					}
+					{
+						posts.map((item) => {
+							return <FeedCard key={posts.indexOf(item)} data={item} navigation={props.navigation} user={item.user} />
+						})
+					}
+					{
+						posts.map((item) => {
+							return <FeedCard key={posts.indexOf(item)} data={item} navigation={props.navigation} user={item.user} />
+						})
+					}
+
+				</ScrollView>
+			</Layout>
 		</SafeAreaView>
 	)
 }
 
 const styles = StyleSheet.create({
-	safeArea : {
-		margin : 10
+	safeArea: {
+		marginBottom : 12,
+		marginLeft : 12,
+		marginRight: 12
+	},
+	heading: {
+		fontFamily: "mukta",
+		textAlign: 'center'
 	}
 })
 
 const mapStateToProps = (store) => ({
 	currentUser: store.userState.currentUser,
 	following: store.userState.following,
-	users : store.usersState.users,
-	usersLoaded : store.usersState.userLoaded,
+	users: store.usersState.users,
+	usersLoaded: store.usersState.userLoaded,
 })
 
 export default connect(mapStateToProps, null)(Feed)
